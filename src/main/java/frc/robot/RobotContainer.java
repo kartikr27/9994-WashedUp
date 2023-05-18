@@ -4,83 +4,79 @@
 
 package frc.robot;
 
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Arm.Arm;
+import frc.robot.subsystems.Arm.Arm.CargoType;
+import frc.robot.subsystems.Arm.Arm.IntakeMode;
+import frc.robot.subsystems.Arm.Arm.RobotDirection;
+import frc.robot.subsystems.Arm.Arm.ScoreLevel;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-
-  public final XboxController d_controller = new XboxController(0);
-  public final XboxController m_controller = new XboxController(1);
-
-  CommandXboxController m_controllerCommand = new CommandXboxController(1);
+  CommandXboxController m_driverController = new CommandXboxController(0);
 
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final JoystickButton zeroGyro =
-      new JoystickButton(d_controller, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric =
-      new JoystickButton(d_controller, XboxController.Button.kLeftBumper.value);
-
-
-
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Arm m_arm = new Arm();
 
   public RobotContainer() {
     // Configure the trigger bindings
     m_drivetrain.setDefaultCommand(
         new SwerveDrive(
             m_drivetrain,
-            () -> -d_controller.getRawAxis(translationAxis),
-            () -> -d_controller.getRawAxis(strafeAxis),
-            () -> -d_controller.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+            () -> -m_driverController.getRawAxis(translationAxis),
+            () -> -m_driverController.getRawAxis(strafeAxis),
+            () -> -m_driverController.getRawAxis(rotationAxis),
+            () -> false));
 
-    configureBindings();
+            configureButtonBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+  private void configureButtonBindings() {
+		DriverStation.silenceJoystickConnectionWarning(true);
 
+		m_driverController.rightBumper()
+			.onTrue(m_arm.setCargoType(CargoType.CONE));
+		m_driverController.leftBumper()
+			.onTrue(m_arm.setCargoType(CargoType.CUBE));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+		m_driverController.povUp()
+			.onTrue(m_arm.setIntakeMode(IntakeMode.SHELF));
+		m_driverController.povRight()
+			.onTrue(m_arm.setIntakeMode(IntakeMode.PORTAL));
+		m_driverController.povDown()
+			.onTrue(m_arm.setIntakeMode(IntakeMode.FLOOR));
 
-    zeroGyro.onTrue(new InstantCommand(() -> m_drivetrain.zeroGyroscope()));
-  }
+		m_driverController.y()
+			.onTrue(m_arm.setScoreLevel(ScoreLevel.HIGH));
+		m_driverController.b()
+			.onTrue(m_arm.setScoreLevel(ScoreLevel.MIDDLE));
+		m_driverController.a()
+			.onTrue(m_arm.setScoreLevel(ScoreLevel.LOW));
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+		m_driverController.start()
+			.onTrue(m_arm.setRobotDirection(RobotDirection.FORWARD));
+		m_driverController.back()
+			.onTrue(m_arm.setRobotDirection(RobotDirection.REVERSE));
+
+		m_driverController.leftTrigger().debounce(0.2)
+			.onTrue(m_arm.getIntakeCommand())
+			.onFalse(m_arm.getHoldCommand());
+		m_driverController.rightTrigger().debounce(0.2)
+			.onTrue(m_arm.getScoreCommand())
+			.onFalse(m_arm.getHoldCommand());
+	}
+
+  public Command getAutonomousCommand() {
+		return new InstantCommand();
+	}
 
 }
