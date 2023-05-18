@@ -45,18 +45,6 @@ public class Elbow extends ProfiledPIDSubsystem {
   private int rotations;
   private double prevRadians;
 
-  /** If 0 Can go -180 to 180 */
-
-  /** If 90 180 - Counter clockwise -180 - Clock wise 90 0 - counter clockwise */
-
-  /** If 180 0 - Clockwise 90 - clockwise 180 -90 - ClockWise -180 - Clockwise */
-
-  /**
-   * If -90 0 - Counter clock wise 90 - Counter clock wise 180 - Counter clock wise -90 - -180 -
-   * Clockwise
-   */
-
-  /** If -180 0 - clock wise 90 - clock wise 180 - clock wise -90 - clock wise -180 - */
   private double voltage = 0;
 
   public Elbow() {
@@ -78,9 +66,8 @@ public class Elbow extends ProfiledPIDSubsystem {
 
     ElbowMotor.setCANTimeout(500);
 
-    // ElbowMotor.setSmartCurrentLimit(5);
 
-    ElbowboreEncoder = new DutyCycleEncoder(1);
+    ElbowboreEncoder = new DutyCycleEncoder(Constants.Elbow.boreEncoderPort);
 
     prevPosition = getAbsoluteRotation();
     prevTime = Timer.getFPGATimestamp();
@@ -139,15 +126,8 @@ public class Elbow extends ProfiledPIDSubsystem {
   public Rotation2d getAbsoluteRotation() {
     double radians = 2 * Math.PI * getBoreEncoder();
 
-    if (prevRadians >= 1.5 * Math.PI && radians <= 0.5 * Math.PI) {
-      rotations += 1;
-    } else if (prevRadians <= 0.5 * Math.PI && radians >= 1.5 * Math.PI) {
-      rotations -= 1;
-    }
 
-    prevRadians = radians;
-
-    return new Rotation2d(radians + rotations * 2 * Math.PI);
+    return new Rotation2d(radians);
   }
 
   @Override

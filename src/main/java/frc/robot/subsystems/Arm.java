@@ -40,7 +40,6 @@ public class Arm extends ProfiledPIDSubsystem {
   private ShuffleboardTab armTab;
 
   private double voltage = 0;
-  public boolean recentFunnel = false;
 
   private static final TrapezoidProfile.Constraints normalConstraints =
       new TrapezoidProfile.Constraints(
@@ -124,26 +123,11 @@ public class Arm extends ProfiledPIDSubsystem {
     rotationsEntry = armTab.add("Rotations", rotations).withPosition(10, 0).getEntry();
     velocityEntry = armTab.add("Velocity", 0).getEntry();
     velocitySetpointEntry = armTab.add("Velocity Setpoint", 0.0).getEntry();
-    // armTab.add(
-    //     "Reset Rotations",
-    //     resetRotationsCommand());
 
-    armTab.add(
-        "Reset Rotations",
-        new InstantCommand(
-            () -> {
-              rotations = 0;
-            }));
+
+
   }
 
-  public Command resetRotationsCommand() {
-    return this.runOnce(
-            () -> {
-              this.rotations = 0;
-              this.setGoal(getAbsoluteRotation());
-            })
-        .ignoringDisable(true);
-  }
 
   @Override
   public void periodic() {
@@ -152,7 +136,6 @@ public class Arm extends ProfiledPIDSubsystem {
     enabledEntry.setBoolean(m_enabled);
     positionEntry.setDouble(getAbsoluteRotation().getDegrees());
     setpointEntry.setDouble(getBore());
-    // setpointEntry.setDouble(Units.radiansToDegrees(getController().getSetpoint().position));
     goalEntry.setDouble(Units.radiansToDegrees(getController().getGoal().position));
     currentLeftEntry.setDouble(armMotorLeft.getOutputCurrent());
     currentRightEntry.setDouble(armMotorRight.getOutputCurrent());
@@ -174,31 +157,17 @@ public class Arm extends ProfiledPIDSubsystem {
         boreEncoder.getAbsolutePosition() + Constants.Arm.BORE_ENCODER_OFFSET, 0.0, 1.0);
   }
 
-  public void setSlowMode(boolean slow) {
-    this.getController().setConstraints(slow ? slowConstraints : normalConstraints);
-  }
+
 
   public Rotation2d getAbsoluteRotation() {
-    // double radians = 2 * Math.PI * getBore();
+    double radians = 2 * Math.PI * getBore();
 
-    double degrees = 360 * getBore();
-    if (prevBoreValue >= 270.0 && degrees <= 90.0) {
-      rotations += 1;
-    } else if (prevBoreValue <= 90.0 && degrees >= 270.0) {
-      rotations -= 1;
-    }
-    prevBoreValue = degrees;
-
-    double outputVal = (degrees + rotations * 360) / 4;
-
-    Rotation2d output2d = Rotation2d.fromDegrees(outputVal);
-    return output2d;
+    return new Rotation2d(radians);
   }
 
   @Override
   protected void useOutput(double output, State setpoint) {
     if (this.m_enabled) {
-      // voltage = armFeedForward.calculate(1.5 * Math.PI - setpoint.position, setpoint.velocity);
 
       voltage =
           output + armFeedForward.calculate(0.5 * Math.PI - setpoint.position, setpoint.velocity);
