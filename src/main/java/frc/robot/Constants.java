@@ -132,4 +132,73 @@ public final class Constants {
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
   }
+  public static final class Arm{
+    public static final int armMotorRight = 6;
+
+    public static final int armMotorLeft = 17;
+
+    public static final int BORE_ENCODER_PORT = 0;
+
+    // Absolute encoder offset
+    public static final double BORE_ENCODER_OFFSET = 0.562 - .047;
+
+    public static final Rotation2d ESTOP_TOLERANCE = Rotation2d.fromDegrees(10);
+
+    // Profiled PID controller gains
+    public static final double kP = 34.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final double kMaxVelocityRadiansPerSecond = 5.45;
+    public static final double kMaxAccelerationRadiansPerSecondSquared = 6.4;
+
+    public static final double kSlowMaxVelocityRadiansPerSecond = 4.2;
+    public static final double kSlowMaxAccelerationRadiansPerSecondSquared = 4.0;
+
+    // Feedforward constants
+    public static final double kS = 0.0;
+    public static final double kG = 0.35;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+
+    // Setpoints
+
+    public static final Rotation2d ARM_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(102);
+    public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(30.5);
+    public static final Rotation2d ARM_SETPOINT_PREINTAKE = Rotation2d.fromDegrees(51);
+    public static final Rotation2d ARM_SETPOINT_PREHIGH_SCORE_AUTON =
+        Rotation2d.fromDegrees(170); // 170 for parallel
+    public static final Rotation2d ARM_SETPOINT_PREHIGH_SCORE =
+        Rotation2d.fromDegrees(244); // 170 for parallel
+    public static final Rotation2d ARM_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(49.3);
+    public static final Rotation2d ARM_SETPOINT_SIDE_CONE_INTAKE =
+        Rotation2d.fromDegrees(41.26); // 42.8
+    public static final Rotation2d ARM_SETPOINT_MID = Rotation2d.fromDegrees(282);
+    public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(264);
+  } 
+  public static final class Wrist {
+    public static final double P = 17.2;
+    public static final double I = 0.1;
+    public static final double D = 0.0;
+    public static final int WristMotor = 13;
+
+    public static final double WristMaxVelocity = 9.8;
+    public static final double WristMaxAccel = 17;
+
+    public static final Rotation2d WRIST_STOP_MAX = new Rotation2d();
+    public static final Rotation2d WRIST_STOP_MIN = new Rotation2d();
+
+    public static final double boreEncoderOffset = -0.35;
+    // -0.507
+
+    public static final double kS = 0.0;
+    public static final double kG = 0.0;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
+
+    public static final Rotation2d wrist_upright_cone_intake = Rotation2d.fromDegrees(180);
+    public static final Rotation2d wrist_zero = Rotation2d.fromDegrees(4);
+    public static final Rotation2d wrist_cone_intake = Rotation2d.fromDegrees(90);
+    public static final Rotation2d wrist_cone_leftScore = Rotation2d.fromDegrees(90);
+  }
 }
