@@ -25,7 +25,7 @@ import frc.lib.util.controller.AsymmetricTrapezoidProfile.Constraints;
  */
 public final class Constants {
 
-  public static final class Swerve {
+  public static final class SwerveConstants {
     public static final double stickDeadband = 0.05;
 
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -42,7 +42,7 @@ public final class Constants {
     public static final double driveGearRatio = (50.0/14.0) * (17.0/27.0) * (45.0/15.0); 
     public static final double angleGearRatio = (150.0 / 7.0); 
 
-    public static final SwerveDriveKinematics swerveKinematics =
+    public static final SwerveDriveKinematics m_driveKinematics =
         new SwerveDriveKinematics(
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
             new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
@@ -96,7 +96,7 @@ public final class Constants {
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
-    public static final class Mod0 {
+    public static final class FrontLeftModule {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 0;
       public static final int canCoderID = 0;
@@ -106,7 +106,7 @@ public final class Constants {
     }
 
     /* Front Right Module - Module 1 */
-    public static final class Mod1 {
+    public static final class FrontRightModule {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 0;
       public static final int canCoderID = 0;
@@ -116,7 +116,7 @@ public final class Constants {
     }
 
     /* Back Left Module - Module 2 */
-    public static final class Mod2 {
+    public static final class BackLeftModule {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 0;
       public static final int canCoderID = 0;
@@ -126,7 +126,7 @@ public final class Constants {
     }
 
     /* Back Right Module - Module 3 */
-    public static final class Mod3 {
+    public static final class BackRightModule {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 0;
       public static final int canCoderID = 0;

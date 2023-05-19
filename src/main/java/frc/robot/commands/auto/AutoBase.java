@@ -11,7 +11,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -32,7 +32,7 @@ public class AutoBase extends SequentialCommandGroup {
     return new SwerveAutoBuilder(
       m_drivetrain::getPose, // pose2d supplier
       m_drivetrain::resetOdometry, // reset odometry at the beginning of auto
-      Constants.Swerve.swerveKinematics, // swerve kinematics
+      SwerveConstants.m_driveKinematics, // swerve kinematics
       new PIDConstants(0, 0, 0), // x y controller
       new PIDConstants(0, 0, 0), // theta controller
       m_drivetrain::setModuleStates,
@@ -45,7 +45,7 @@ public class AutoBase extends SequentialCommandGroup {
     return new SwerveAutoBuilder(
       m_drivetrain::getPose, // pose2d supplier
       m_drivetrain::resetOdometry, // reset odometry at the beginning of auto
-      Constants.Swerve.swerveKinematics, // swerve kinematics
+      SwerveConstants.m_driveKinematics, // swerve kinematics
       new PIDConstants(0, 0, 0), // x y controller
       new PIDConstants(0, 0, 0), // theta controller
       m_drivetrain::setModuleStates,
