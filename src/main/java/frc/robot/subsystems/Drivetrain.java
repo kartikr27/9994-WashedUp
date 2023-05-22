@@ -22,13 +22,12 @@ public class Drivetrain extends SubsystemBase {
 
 	public SwerveDrivePoseEstimator m_poseEstimator;
 	private SwerveDriveOdometry m_odometry;
-
 	private SwerveModule[] m_swerveModules;
 
-  private AHRS m_gyro = new AHRS(Port.kMXP);
+	private AHRS m_gyro = new AHRS(Port.kMXP);
 
 	private Field2d m_field;
-  
+
 	public Drivetrain() {
 		m_swerveModules =
 			new SwerveModule[] {
@@ -50,16 +49,19 @@ public class Drivetrain extends SubsystemBase {
 		SmartDashboard.putData("Field", m_field);
 	}
 
-	public void drive(
-		Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-		SwerveModuleState[] swerveModuleStates =
-			SwerveConstants.m_driveKinematics.toSwerveModuleStates(
-				fieldRelative ?
-				ChassisSpeeds.fromFieldRelativeSpeeds(
-					translation.getX(), translation.getY(), rotation, getYaw()) :
-				new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+	public void drive(double forward, double side, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+		SwerveModuleState[] swerveModuleStates = SwerveConstants.m_driveKinematics.toSwerveModuleStates(
+			fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+				forward * SwerveConstants.maxSpeed,
+				side * SwerveConstants.maxSpeed,
+				rotation * SwerveConstants.maxAngularVelocity,
+				getYaw()) :
+			new ChassisSpeeds(
+				forward * SwerveConstants.maxSpeed,
+				side * SwerveConstants.maxSpeed,
+				rotation * SwerveConstants.maxAngularVelocity));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.maxSpeed);
-
+	
 		for (SwerveModule mod: m_swerveModules) {
 			mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
 		}
@@ -134,7 +136,6 @@ public class Drivetrain extends SubsystemBase {
 	}
 
 	@Override
-
 	public void periodic() {
 		m_odometry.update(getYaw(), getPositions());
 		m_field.setRobotPose(getPose());
