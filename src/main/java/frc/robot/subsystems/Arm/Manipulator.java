@@ -20,7 +20,9 @@ public class Manipulator extends SubsystemBase {
   private enum ManipulatorState {
     INTAKING, OUTTAKING, HOLDING, STOPPED
   }
+
   private ManipulatorState manipulatorState = ManipulatorState.STOPPED;
+  
   private Timer manipulatorRunningTimer = new Timer();
 
   /** Creates a new Manipulator. */

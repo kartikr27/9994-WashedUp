@@ -20,7 +20,6 @@ import frc.robot.Constants.ArmConstants;
 public class Arm {
     private final Elbow m_elbow = new Elbow();
     private final Wrist m_wrist = new Wrist();
-
     private final Manipulator m_manipulator = new Manipulator();
 
     public static enum CargoType {
@@ -59,78 +58,6 @@ public class Arm {
         return armCommand;
     }
 
-    private Command forwardShelfCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardShelfCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardShelfCube))),
-		() -> cargoType);
-
-	private Command reverseShelfCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardShelfCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardShelfCube.getInverse()))),
-		() -> cargoType);
-
-	private Command forwardPortalCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube))),
-		() -> cargoType);
-
-	private Command reversePortalCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube.getInverse()))),
-		() -> cargoType);
-
-	private Command forwardFloorCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube))),
-		() -> cargoType);
-
-	Command reverseFloorCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube.getInverse()))),
-		() -> cargoType);
-
-	private Command forwardHighCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardHighCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardHighCube))),
-		() -> cargoType);
-
-	private Command reverseHighCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardMiddleCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardMiddleCube.getInverse()))),
-		() -> cargoType);
-
-	private Command forwardMiddleCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardLowCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardLowCube))),
-		() -> cargoType);
-
-	private Command reverseMiddleCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube.getInverse()))),
-		() -> cargoType);
-
-	private Command forwardLowCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone)),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube))),
-		() -> cargoType);
-
-	private Command reverseLowCommand = new SelectCommand(
-		Map.ofEntries(
-			Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone.getInverse())),
-			Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube.getInverse()))),
-		() -> cargoType);
-
 	public Command setCargoType(CargoType cargoType) {
 		return new InstantCommand(() -> this.cargoType = cargoType);
 	}
@@ -152,40 +79,89 @@ public class Arm {
 				Map.ofEntries(
 					Map.entry(IntakeMode.SHELF, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardShelfCommand),
-							Map.entry(RobotDirection.REVERSE, reverseShelfCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardShelfCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardShelfCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardShelfCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardShelfCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection)),
 					Map.entry(IntakeMode.PORTAL, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardPortalCommand),
-							Map.entry(RobotDirection.REVERSE, reversePortalCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection)),
 					Map.entry(IntakeMode.FLOOR, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardFloorCommand),
-							Map.entry(RobotDirection.REVERSE, reverseFloorCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection))
 				), () -> intakeMode)
 			.alongWith(m_manipulator.setIntake());
 	}
-
+	
+	
 	public Command getScoreCommand() {
 		return new SelectCommand(
 				Map.ofEntries(
 					Map.entry(ScoreLevel.HIGH, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardHighCommand),
-							Map.entry(RobotDirection.REVERSE, reverseHighCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardHighCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardHighCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardMiddleCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardMiddleCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection)),
 					Map.entry(ScoreLevel.MIDDLE, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardMiddleCommand),
-							Map.entry(RobotDirection.REVERSE, reverseMiddleCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardLowCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardLowCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardPortalCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardPortalCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection)),
 					Map.entry(ScoreLevel.LOW, new SelectCommand(
 						Map.ofEntries(
-							Map.entry(RobotDirection.FORWARD, forwardLowCommand),
-							Map.entry(RobotDirection.REVERSE, reverseLowCommand)),
+							Map.entry(RobotDirection.FORWARD, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone)),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube))),
+								() -> cargoType)),
+							Map.entry(RobotDirection.REVERSE, new SelectCommand(
+								Map.ofEntries(
+									Map.entry(CargoType.CONE, toPreset(ArmConstants.kForwardFloorCone.getInverse())),
+									Map.entry(CargoType.CUBE, toPreset(ArmConstants.kForwardFloorCube.getInverse()))),
+								() -> cargoType))),
 						() -> robotDirection))
 				), () -> scoreLevel)
 			.andThen(m_manipulator.setOuttake());
