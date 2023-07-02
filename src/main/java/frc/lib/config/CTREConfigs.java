@@ -4,7 +4,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
-import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants;
 
 public final class CTREConfigs {
   public CANCoderConfiguration swerveCanCoderConfig;
@@ -14,7 +14,7 @@ public final class CTREConfigs {
 
     /* Swerve CANCoder Configuration */
     swerveCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-    swerveCanCoderConfig.sensorDirection = SwerveConstants.canCoderInvert;
+    swerveCanCoderConfig.sensorDirection = Constants.Swerve.canCoderInvert;
     swerveCanCoderConfig.initializationStrategy =
         SensorInitializationStrategy.BootToAbsolutePosition;
     swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
