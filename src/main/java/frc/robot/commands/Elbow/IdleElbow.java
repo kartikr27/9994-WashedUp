@@ -19,9 +19,9 @@ public class IdleElbow extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_wrist2.enable();
-    // m_wrist2.setGoal(m_wrist2.getAbsoluteRotation().getRadians());
-    m_Elbow.disable();
+    m_Elbow.enable();
+    m_Elbow.setGoal(m_Elbow.getAbsoluteRotation().getRadians());
+    // m_Elbow.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -2,23 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Arm;
+package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Intake;
 
-public class ControlArm extends CommandBase {
-  /** Creates a new ControlArm. */
-  private final Arm m_Arm;
-
-  private final XboxController m_Controller;
-
-  public ControlArm(Arm arm, XboxController controller) {
+public class ReverseIntake extends CommandBase {
+  /** Creates a new ReverseIntake. */
+  private final Intake m_Intake;
+  public ReverseIntake(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.m_Arm = arm;
-    this.m_Controller = controller;
-    addRequirements(arm);
+    this.m_Intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -28,15 +23,12 @@ public class ControlArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.disable();
-    m_Arm.setSpeed(-m_Controller.getLeftY()*0.3);
+    m_Intake.runIntake(-0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Arm.stopArm();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -1,66 +1,66 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveDrive extends CommandBase {
-  private Drivetrain s_Swerve;
-  private DoubleSupplier translationSup;
-  private DoubleSupplier strafeSup;
-  private DoubleSupplier rotationSup;
-  private BooleanSupplier robotCentricSup;
-  private BooleanSupplier slowSpeedSup;
 
-  private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
-  private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
+    private final SwerveSubsystem swerveSubsystem;
+    private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
+    private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private boolean fieldRelative;
 
-  public SwerveDrive(
-      Drivetrain s_Swerve,
-      DoubleSupplier translationSup,
-      DoubleSupplier strafeSup,
-      DoubleSupplier rotationSup,
-      BooleanSupplier robotCentricSup) {
-    this.s_Swerve = s_Swerve;
-    addRequirements(s_Swerve);
+    public SwerveDrive(SwerveSubsystem swerveSubsystem,
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, boolean fieldRelative) {
+        this.swerveSubsystem = swerveSubsystem;
+        this.xSpdFunction = xSpdFunction;
+        this.ySpdFunction = ySpdFunction;
+        this.turningSpdFunction = turningSpdFunction;
+        this.fieldRelative = fieldRelative;
+        this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
+        this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
+        this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
+        addRequirements(swerveSubsystem);
+    }
 
-    this.translationSup = translationSup;
-    this.strafeSup = strafeSup;
-    this.rotationSup = rotationSup;
-    this.robotCentricSup = robotCentricSup;
+    @Override
+    public void initialize() {
+    }
 
-  }
+    @Override
+    public void execute() {
+        // 1. Get real-time joystick inputs
+        double xSpeed = xSpdFunction.get();
+        double ySpeed = ySpdFunction.get();
+        double theta = turningSpdFunction.get();
 
-  @Override
-  public void execute() {
+        // 2. Apply deadband
+        xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
+        theta = Math.abs(theta) > OIConstants.kDeadband ? theta : 0.0;
 
+        // 3. Make the driving smoother
+        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        theta = turningLimiter.calculate(theta)
+                * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+                swerveSubsystem.drive(xSpeed, ySpeed, theta, fieldRelative);
+    }
 
-    /* Get Values, Deadband*/
-    double translationVal =
-        translationLimiter.calculate(
-            
-            MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.Swerve.stickDeadband));
-    double strafeVal =
-        strafeLimiter.calculate(
-  
-            MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.Swerve.stickDeadband));
-    double rotationVal =
-        rotationLimiter.calculate(
- 
-            MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
+    @Override
+    public void end(boolean interrupted) {
+        swerveSubsystem.stopModules();
+    }
 
-
-    /* Drive */
-    s_Swerve.drive(
-        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-        rotationVal * Constants.Swerve.maxAngularVelocity,
-        !robotCentricSup.getAsBoolean(),
-        true);
-  }
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

@@ -13,14 +13,23 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elbow;
+import frc.robot.commands.ArmElbowSetpoints;
+import frc.robot.commands.ReverseSequence;
+import frc.robot.commands.SequentialSetpoint;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.commands.Arm.ControlArm;
+import frc.robot.commands.Arm.IdleArm;
 import frc.robot.commands.Arm.SetArm;
 import frc.robot.commands.Elbow.ControlElbow;
+import frc.robot.commands.Elbow.IdleElbow;
+import frc.robot.commands.Elbow.SetElbow;
+import frc.robot.commands.Intake.IdleIntake;
+import frc.robot.commands.Intake.ReverseIntake;
 import frc.robot.commands.Intake.RunIntake;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,9 +49,7 @@ public class RobotContainer {
 
   CommandXboxController m_controllerCommand = new CommandXboxController(1);
 
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+
 
   private final int armAxis = XboxController.Axis.kLeftY.value;
   private final int elbowAxis = XboxController.Axis.kRightY.value;
@@ -54,7 +61,10 @@ public class RobotContainer {
   private final Trigger elbowMove2 = m_controllerCommand.axisGreaterThan(elbowAxis, 0.08);
 
   private final JoystickButton zeroGyro =
-      new JoystickButton(d_controller, XboxController.Button.kY.value);
+      new JoystickButton(d_controller, XboxController.Button.kA.value);
+
+      private final JoystickButton resetElbowEncoder =
+      new JoystickButton(m_controller, XboxController.Button.kA.value);
   private final JoystickButton robotCentric =
       new JoystickButton(d_controller, XboxController.Button.kLeftBumper.value);
 
@@ -64,10 +74,15 @@ public class RobotContainer {
   private final JoystickButton reverseIntake =
       new JoystickButton(m_controller, XboxController.Button.kB.value);
 
+      private final int cubeModifyAxis = XboxController.Axis.kRightTrigger.value;
+      private final Trigger cubeModify = m_controllerCommand.axisGreaterThan(cubeModifyAxis, 0.2);
+
+
+
 
       private final POVButton setBotHigh = new POVButton(m_controller, 0);
 
-      private final POVButton setBotMid = new POVButton(m_controller, 90);
+      private final POVButton setBotMidCone = new POVButton(m_controller, 90);
     
       private final POVButton setBotIntake = new POVButton(m_controller, 180);
       private final POVButton setBotIntake2 = new POVButton(m_controller, 225);
@@ -79,22 +94,28 @@ public class RobotContainer {
 
 
 
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final Arm m_Arm = new Arm();
   private final Elbow m_Elbow = new Elbow();
   private final Intake m_Intake = new Intake();
 
   public RobotContainer() {
     // Configure the trigger bindings
-    m_drivetrain.setDefaultCommand(
-        new SwerveDrive(
-            m_drivetrain,
-            () -> -d_controller.getRawAxis(translationAxis),
-            () -> -d_controller.getRawAxis(strafeAxis),
-            () -> -d_controller.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+    boolean fieldRelative = true;
+    swerveSubsystem.setDefaultCommand(new SwerveDrive(
+        swerveSubsystem,
+        () -> -d_controller.getRawAxis(OIConstants.kDriverYAxis),
+        () -> -d_controller.getRawAxis(OIConstants.kDriverXAxis),
+        () -> d_controller.getRawAxis(OIConstants.kDriverRotAxis), 
+        fieldRelative));
 
     configureBindings();
+
+    m_Intake.setDefaultCommand(new IdleIntake(m_Intake));
+
+    m_Arm.setDefaultCommand(new IdleArm(m_Arm));
+    m_Elbow.setDefaultCommand(new IdleElbow(m_Elbow));
+
 
     
   }
@@ -115,17 +136,42 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
-    zeroGyro.onTrue(new InstantCommand(() -> m_drivetrain.zeroGyroscope()));
+    zeroGyro.onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
 
-	armMove.whileTrue(new ControlArm(m_Arm, m_controller));
-    armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
+    resetElbowEncoder.onTrue(new InstantCommand(() -> m_Elbow.resetEncoder()));
+	// armMove.whileTrue(new ControlArm(m_Arm, m_controller));
+    // armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
 
-	elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
-	elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	// elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	// elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
 
-  setBotHigh.whileTrue(new SetArm(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH));
 
   runIntake.whileTrue(new RunIntake(m_Intake));
+  reverseIntake.whileTrue(new ReverseIntake(m_Intake));
+
+//   setBotHigh.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
+
+  setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
+
+  setBotHigh.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
+
+  setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+
+  setBotIntake.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
+
+
+
+
+
+
+
+
+
+
+  // All setpoints
+
+//   setBotMidCone.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+//   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
 
 
 	

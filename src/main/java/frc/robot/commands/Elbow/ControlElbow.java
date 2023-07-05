@@ -28,7 +28,7 @@ public class ControlElbow extends CommandBase {
   @Override
   public void execute() {
     m_Elbow.disable();
-    m_Elbow.set(m_Controller.getRightY());
+    m_Elbow.setSpeed(m_Controller.getRightY()*0.4);
   }
 
   // Called once the command ends or is interrupted.

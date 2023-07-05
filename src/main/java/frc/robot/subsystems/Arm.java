@@ -88,7 +88,7 @@ public class Arm extends ProfiledPIDSubsystem {
     armMotorLeft.setIdleMode(IdleMode.kBrake);
     armMotorLeft.setSmartCurrentLimit(40);
     
-    // armMotorLeft.setInverted(true);
+    armMotorLeft.setInverted(true);
 
     armMotorLeft.burnFlash();
 
@@ -172,14 +172,14 @@ public class Arm extends ProfiledPIDSubsystem {
     if (this.m_enabled) {
 
       voltage =
-          output + armFeedForward.calculate(0.5 * Math.PI - setpoint.position, setpoint.velocity);
+          output + armFeedForward.calculate(0.5 * Math.PI + setpoint.position, setpoint.velocity);
 
       // voltage = MathUtil.clamp(voltage, -12.0, 12.0);
 
-      voltageEntry.setDouble(-voltage);
+      voltageEntry.setDouble(voltage);
 
-      armMotorLeft.setVoltage(-voltage);
-      armMotorRight.setVoltage(-voltage);
+      armMotorLeft.setVoltage(voltage);
+      armMotorRight.setVoltage(voltage);
     }
   }
 

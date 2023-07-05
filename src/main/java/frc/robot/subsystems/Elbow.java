@@ -16,6 +16,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -33,16 +34,13 @@ public class Elbow extends ProfiledPIDSubsystem {
   /** Creates a new Elbow2. */
 
 
-
-
-
-
-
-
   private CANSparkMax ElbowMotor;
 
+  private ArmFeedforward elbowFeedForward;
 
-  private AbsoluteEncoder ElbowEncoderBore;
+
+
+  private RelativeEncoder relativeEncoder;
 
   private ShuffleboardTab ElbowTab;
 
@@ -75,20 +73,23 @@ public class Elbow extends ProfiledPIDSubsystem {
 
 
 
-
-
-
     ElbowMotor = new CANSparkMax(Constants.Elbow.ElbowMotor, MotorType.kBrushless);
 
-    ElbowEncoder = ElbowMotor.getEncoder();
 
     ElbowMotor.setIdleMode(IdleMode.kBrake);
+    ElbowMotor.setInverted(true);
+    // relativeEncoder.setInverted(true);
+
+    
 
 
 
-    // ElbowboreEncoder = new DutyCycleEncoder(Constants.Elbow.boreEncoderPort);
 
-    ElbowEncoderBore = ElbowMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+elbowFeedForward =
+new ArmFeedforward(Constants.Elbow.kS, Constants.Elbow.kG, Constants.Elbow.kV, Constants.Elbow.kA);
+
+    relativeEncoder = ElbowMotor.getEncoder();
+
     prevPosition = getAbsoluteRotation();
     prevTime = Timer.getFPGATimestamp();
 
@@ -106,8 +107,7 @@ public class Elbow extends ProfiledPIDSubsystem {
   public void periodic() {
     super.periodic();
 
-    positionEntry.setDouble(getAbsoluteRotation().getDegrees());
-    setpointEntry.setDouble(getBoreEncoder());
+    setpointEntry.setDouble(getAbsoluteRotation().getDegrees());
     goalEntry.setDouble(getController().getGoal().position);
     velocitySetpointEntry.setDouble(getController().getSetpoint().velocity);
 
@@ -126,7 +126,7 @@ public class Elbow extends ProfiledPIDSubsystem {
     // Use the output (and optionally the setpoint) here
 
     if (this.m_enabled) {
-      voltage = output;
+      voltage = output +elbowFeedForward.calculate(0.5 * Math.PI + setpoint.position, setpoint.velocity);
 
       voltage = MathUtil.clamp(voltage, -9.0, 9.0);
 
@@ -134,17 +134,19 @@ public class Elbow extends ProfiledPIDSubsystem {
         ElbowMotor.setVoltage(voltage);
       
 
-      voltageEntry.setDouble(-voltage);
+      voltageEntry.setDouble(voltage);
     }
   }
 
   public double getBoreEncoder() {
-    return (MathUtil.inputModulus(
-        (1 - ElbowEncoderBore.getPosition()) + Constants.Elbow.boreEncoderOffset, 0, 1));
+   
+
+    return relativeEncoder.getPosition();
   }
   
 
   public Rotation2d getAbsoluteRotation() {
+    // 1.25
     double radians = 2 * Math.PI * getBoreEncoder();
 
 
@@ -161,9 +163,8 @@ public class Elbow extends ProfiledPIDSubsystem {
     this.setGoal(rotation.getRadians());
   }
 
-  public void set(double speed) {
-    disable();
-    
+  public void setSpeed(double speed) {
+    //disable();
     ElbowMotor.set(speed);
     
   }
@@ -189,5 +190,9 @@ public class Elbow extends ProfiledPIDSubsystem {
 
   public void stopElbow() {
     ElbowMotor.stopMotor();
+  }
+
+  public void resetEncoder(){
+    relativeEncoder.setPosition(0.0);
   }
 }

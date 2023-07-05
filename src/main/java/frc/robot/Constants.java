@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import frc.lib.config.SwerveModuleConstants;
 
 
 /**
@@ -24,117 +23,94 @@ import frc.lib.config.SwerveModuleConstants;
  */
 public final class Constants {
 
+  public static final class ModuleConstants {
+    public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
+    public static final double kDriveMotorGearRatio = 1 / 5.14;
+    public static final double kTurningMotorGearRatio = 1 / 12.8;
+    public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+    public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+    public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
+    public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
+    public static final double kTurnP = 0.3;
+    public static final double kDriveP = 0.7;
+}
+
+public static final class DriveConstants {
+
+    // Distance between right and left wheels
+    public static final double kTrackWidth = Units.inchesToMeters(20.5);
+    // Distance between front and back wheels
+    public static final double kWheelBase = Units.inchesToMeters(20.5);
+
+
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+    
+    //Drivetrain Motor Ports
+    public static final int kFrontLeftDriveMotorPort = 5;
+    public static final int kBackLeftDriveMotorPort = 2;
+    public static final int kFrontRightDriveMotorPort = 8;
+    public static final int kBackRightDriveMotorPort = 3;
+
+    public static final int kFrontLeftTurningMotorPort = 6;
+    public static final int kBackLeftTurningMotorPort = 1;
+    public static final int kFrontRightTurningMotorPort = 7;
+    public static final int kBackRightTurningMotorPort = 4;
+
+    //Relative Encoders
+    public static final boolean kFrontLeftTurningEncoderReversed = false;
+    public static final boolean kBackLeftTurningEncoderReversed = false;
+    public static final boolean kFrontRightTurningEncoderReversed = false;
+    public static final boolean kBackRightTurningEncoderReversed = false;
+
+    public static final boolean kFrontLeftDriveEncoderReversed = false;
+    public static final boolean kBackLeftDriveEncoderReversed = false;
+    public static final boolean kFrontRightDriveEncoderReversed = false;
+    public static final boolean kBackRightDriveEncoderReversed = false;
+
+    //Absolute Encoders
+    public static final int kFrontLeftDriveAbsoluteEncoderPort = 14;
+    public static final int kBackLeftDriveAbsoluteEncoderPort = 13;
+    public static final int kFrontRightDriveAbsoluteEncoderPort = 15;
+    public static final int kBackRightDriveAbsoluteEncoderPort = 12;
+
+    public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
+    public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
+    public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
+    public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
+
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(332.31); 
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(269.47); 
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(315.087); 
+    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(159.61); 
+
+    //Physical
+    public static final double kPhysicalMaxSpeedMetersPerSecond = 5.8;
+    public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+
+    //Speed and Accel
+    public static final double kTeleDriveMaxSpeedMultiplier = 0.5;
+    public static final double kTeleDriveMaxAnglularSpeedMultiplier = 0.5;
+    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * kTeleDriveMaxSpeedMultiplier;
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * kTeleDriveMaxAnglularSpeedMultiplier;
+    public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3.0;
+    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+}
+
+public static final class OIConstants {
+  public static final int kDriverControllerPort = 0;
+
+  public static final int kDriverYAxis = 1;
+  public static final int kDriverXAxis = 0;
+  public static final int kDriverRotAxis = 4;
+  public static final int kDriverFieldOrientedButtonIdx = 1;
+
+  public static final double kDeadband = 0.05;
+}
   
-  public static final class Swerve {
-    public static final double stickDeadband = 0.05;
-
-    public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
-
-    /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(0);
-    public static final double wheelBase = Units.inchesToMeters(0);
-    public static final double wheelDiameter = Units.inchesToMeters(4.0);
-    public static final double wheelCircumference = wheelDiameter * Math.PI;
-
-    public static final double openLoopRamp = 0.25;
-    public static final double closedLoopRamp = 0.0;
-
-    public static final double driveGearRatio = (50.0/14.0) * (17.0/27.0) * (45.0/15.0); 
-    public static final double angleGearRatio = (150.0 / 7.0); 
-
-    public static final SwerveDriveKinematics swerveKinematics =
-        new SwerveDriveKinematics(
-            new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
-
-    /* Swerve Voltage Compensation */
-    public static final double voltageComp = 12.0;
-
-    /* Swerve Current Limiting */
-    public static final int angleContinuousCurrentLimit = 20;
-    public static final int driveContinuousCurrentLimit = 80;
-
-    /* Angle Motor PID Values */
-    public static final double angleKP = 0.01;
-    public static final double angleKI = 0.0;
-    public static final double angleKD = 0.0;
-    public static final double angleKFF = 0.0;
-
-    /* Drive Motor PID Values */
-    public static final double driveKP = 0.1;
-    public static final double driveKI = 0.0;
-    public static final double driveKD = 0.0;
-    public static final double driveKFF = 0.0;
-
-    /* Drive Motor Characterization Values */
-    public static final double driveKS = 0.667;
-    public static final double driveKV = 2.44;
-    public static final double driveKA = 0.27;
-
-    /* Drive Motor Conversion Factors */
-    public static final double driveConversionPositionFactor =
-        (wheelDiameter * Math.PI) / driveGearRatio;
-    public static final double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0;
-    public static final double angleConversionFactor = 360.0 / angleGearRatio;
-
-    /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // meters per second  
-    public static final double maxAngularVelocity = 6;            
-
-    /* Neutral Modes */
-    public static final IdleMode angleNeutralMode = IdleMode.kBrake;
-    public static final IdleMode driveNeutralMode = IdleMode.kBrake;
-
-    /* Motor Inverts */
-    public static final boolean driveInvert = true;
-    public static final boolean angleInvert = true;
-
-    /* Angle Encoder Invert */
-    public static final boolean canCoderInvert = false;
-
-    /* Module Specific Constants */
-    /* Front Left Module - Module 0 */
-    public static final class Mod0 {
-      public static final int driveMotorID = 5;
-      public static final int angleMotorID = 6;
-      public static final int canCoderID = 14;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0); 
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-    }
-
-    /* Front Right Module - Module 1 */
-    public static final class Mod1 {
-      public static final int driveMotorID = 8;
-      public static final int angleMotorID = 7;
-      public static final int canCoderID = 15;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0); 
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-    }
-
-    /* Back Left Module - Module 2 */
-    public static final class Mod2 {
-      public static final int driveMotorID = 2;
-      public static final int angleMotorID = 1;
-      public static final int canCoderID = 13;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-    }
-
-    /* Back Right Module - Module 3 */
-    public static final class Mod3 {
-      public static final int driveMotorID = 3;
-      public static final int angleMotorID = 4;
-      public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
-    }
-  }
   public static final class Arm{
     public static final int armMotorRight = 10;
 
@@ -143,70 +119,78 @@ public final class Constants {
     public static final int BORE_ENCODER_PORT = 0;
 
     // Absolute encoder offset
-    public static final double BORE_ENCODER_OFFSET = 0.0;
+    public static final double BORE_ENCODER_OFFSET = 0.075;
 
 
     // Profiled PID controller gains
-    public static final double kP = 0.0;
+    public static final double kP = 12.1;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
-    public static final double kMaxVelocityRadiansPerSecond = 5.45;
-    public static final double kMaxAccelerationRadiansPerSecondSquared = 6.4;
+    public static final double kMaxVelocityRadiansPerSecond = 3.3;
+    public static final double kMaxAccelerationRadiansPerSecondSquared = 8.0;
 
     public static final double kSlowMaxVelocityRadiansPerSecond = 4.2;
     public static final double kSlowMaxAccelerationRadiansPerSecondSquared = 4.0;
 
     // Feedforward constants
     public static final double kS = 0.0;
-    public static final double kG = 0.35;
+    public static final double kG = 0.32;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
 
     // Setpoints
 
-    public static final Rotation2d ARM_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(102);
-    public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(30.5);
-    public static final Rotation2d ARM_SETPOINT_PREINTAKE = Rotation2d.fromDegrees(51);
-    public static final Rotation2d ARM_SETPOINT_PREHIGH_SCORE_AUTON =
-        Rotation2d.fromDegrees(170); // 170 for parallel
-    public static final Rotation2d ARM_SETPOINT_PREHIGH_SCORE =
-        Rotation2d.fromDegrees(244); // 170 for parallel
-    public static final Rotation2d ARM_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(49.3);
-    public static final Rotation2d ARM_SETPOINT_SIDE_CONE_INTAKE =
-        Rotation2d.fromDegrees(41.26); // 42.8
-    public static final Rotation2d ARM_SETPOINT_MID = Rotation2d.fromDegrees(282);
-    public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(264);
+    public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(102);
+    public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(182);
+
+    public static final Rotation2d ARM_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(230
+    );
+    public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CONE =
+        Rotation2d.fromDegrees(191); 
+        public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CUBE =
+        Rotation2d.fromDegrees(191); 
+    public static final Rotation2d ARM_SETPOINT_MID_CONE = Rotation2d.fromDegrees(60);
+    public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(180);
+    public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(60);
   } 
   public static final class Elbow {
-    public static final double P = 0.0;
-    public static final double I = 0.0;
+    public static final double P = 10.2;
+    public static final double I = 1.5;
     public static final double D = 0.0;
     public static final int ElbowMotor = 11;
 
-    public static final double ElbowMaxVelocity = 9.8;
-    public static final double ElbowMaxAccel = 17;
+    public static final double ElbowMaxVelocity = 8.8;
+    public static final double ElbowMaxAccel = 9.0;
 
     public static final double boreEncoderOffset = 0.0;
     public static final int boreEncoderPort = 1;
 
     public static final double kS = 0.0;
-    public static final double kG = 0.0;
+    public static final double kG = 0.2;
     public static final double kV = 0.0;
     public static final double kA = 0.0;
+    
 
-    public static final Rotation2d Elbow_upright_cone_intake = Rotation2d.fromDegrees(180);
-    public static final Rotation2d Elbow_zero = Rotation2d.fromDegrees(4);
-    public static final Rotation2d Elbow_cone_intake = Rotation2d.fromDegrees(90);
-    public static final Rotation2d Elbow_cone_leftScore = Rotation2d.fromDegrees(90);
+    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(102);
+    public static final Rotation2d ELBOW_SETPOINT_BOT = Rotation2d.fromDegrees(1.0);
+
+    public static final Rotation2d ELBOW_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(218);
+    public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CONE =
+        Rotation2d.fromDegrees(156); 
+
+        public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CUBE =
+        Rotation2d.fromDegrees(149); 
+    public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(116);
+    public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(1.0);
+    public static final Rotation2d ELBOW_SETPOINT_HIGH = Rotation2d.fromDegrees(198);
   }
 
   public static final class Intake {
     public static final double P = 0.01;
     public static final double I = 0;
     public static final double D = 0;
-    public static final int intakeMotor = 12;
-    public static final int PWMPort = 0;
+    public static final int intakeMotor = 25;
 
     public static final int intakeCurrentLimit = 8;
   }
