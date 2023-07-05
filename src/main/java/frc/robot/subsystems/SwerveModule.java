@@ -5,15 +5,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import com.ctre.phoenix.sensors.CANCoder;
 import frc.robot.Constants.ModuleConstants;
-import edu.wpi.first.wpilibj.AnalogInput;
 
 public class SwerveModule {
+
+    public int moduleNumber;
 
     private CANSparkMax drivingMotor;
     private CANSparkMax turningMotor;
@@ -29,6 +30,7 @@ public class SwerveModule {
     private PIDController turningPIDController;
 
     public SwerveModule(
+            int moduleNumber,
             int drivingMotorID,
             int turningMotorID,
             boolean drivingMotorReversed,
@@ -36,6 +38,8 @@ public class SwerveModule {
             int absoluteEncoderID,
             double absoluteEncoderOffset,
             boolean absoluteEncoderReversed) {
+
+        this.moduleNumber = moduleNumber;
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderID);
@@ -112,6 +116,12 @@ public class SwerveModule {
         turningMotor.set(turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] state", state.toString());
     }
+
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(
+            drivingEncoder.getPosition(),
+            Rotation2d.fromDegrees(turningEncoder.getPosition() - (absoluteEncoderOffsetRad * 180.0 / Math.PI)));
+      }
 
     public void stop() {
         drivingMotor.set(0);
