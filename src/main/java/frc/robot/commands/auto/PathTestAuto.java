@@ -1,38 +1,38 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// // Copyright (c) FIRST and other WPILib contributors.
+// // Open Source Software; you can modify and/or share it under the terms of
+// // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.auto;
+// package frc.robot.commands.auto;
 
-import java.util.List;
+// import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
+// import com.pathplanner.lib.PathConstraints;
+// import com.pathplanner.lib.PathPlanner;
+// import com.pathplanner.lib.PathPlannerTrajectory;
+// import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import frc.robot.subsystems.SwerveSubsystem;
+// import frc.robot.subsystems.SwerveSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+// // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// // information, see:
+// // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
-public class PathTestAuto extends AutoBase {
-	SwerveSubsystem m_drivetrain;
+// public class PathTestAuto extends AutoBase {
+// 	SwerveSubsystem m_drivetrain;
 
-	List<PathPlannerTrajectory> autoPathGroup =
-		PathPlanner.loadPathGroup(
-			"StarTuner",
-			new PathConstraints(3.0,3.0));
+// 	List<PathPlannerTrajectory> autoPathGroup =
+// 		PathPlanner.loadPathGroup(
+// 			"StarTuner",
+// 			new PathConstraints(3.0,3.0));
 
-	public PathTestAuto(SwerveSubsystem m_drivetrain) {
-		super(m_drivetrain);
+// 	public PathTestAuto(SwerveSubsystem m_drivetrain) {
+// 		super(m_drivetrain);
 
-		SwerveAutoBuilder autoBuilder = getSwerveAutoBuilder(); 
+// 		SwerveAutoBuilder autoBuilder = getSwerveAutoBuilder(); 
 
-		addCommands(
-			autoBuilder.fullAuto(autoPathGroup)
-		);
+// 		addCommands(
+// 			autoBuilder.fullAuto(autoPathGroup)
+// 		);
 
-	}
-}
+// 	}
+// }

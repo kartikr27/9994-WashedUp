@@ -127,7 +127,7 @@ public static final class OIConstants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
-    public static final double kMaxVelocityRadiansPerSecond = 3.3;
+    public static final double kMaxVelocityRadiansPerSecond = 4.8;
     public static final double kMaxAccelerationRadiansPerSecondSquared = 8.0;
 
     public static final double kSlowMaxVelocityRadiansPerSecond = 4.2;
@@ -141,8 +141,8 @@ public static final class OIConstants {
 
     // Setpoints
 
-    public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(102);
-    public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(182);
+    public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(170);
+    public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(180);
 
     public static final Rotation2d ARM_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(230
     );
@@ -151,17 +151,17 @@ public static final class OIConstants {
         public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CUBE =
         Rotation2d.fromDegrees(191); 
     public static final Rotation2d ARM_SETPOINT_MID_CONE = Rotation2d.fromDegrees(60);
-    public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(180);
+    public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(176);
     public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(60);
   } 
   public static final class Elbow {
     public static final double P = 10.2;
-    public static final double I = 1.5;
+    public static final double I = 1.2;
     public static final double D = 0.0;
     public static final int ElbowMotor = 11;
 
-    public static final double ElbowMaxVelocity = 8.8;
-    public static final double ElbowMaxAccel = 9.0;
+    public static final double ElbowMaxVelocity = 14.8;
+    public static final double ElbowMaxAccel = 18.0;
 
     public static final double boreEncoderOffset = 0.0;
     public static final int boreEncoderPort = 1;
@@ -172,7 +172,7 @@ public static final class OIConstants {
     public static final double kA = 0.0;
     
 
-    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(102);
+    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(-20);
     public static final Rotation2d ELBOW_SETPOINT_BOT = Rotation2d.fromDegrees(1.0);
 
     public static final Rotation2d ELBOW_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(218);
@@ -182,7 +182,7 @@ public static final class OIConstants {
         public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CUBE =
         Rotation2d.fromDegrees(149); 
     public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(116);
-    public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(1.0);
+    public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(-29);
     public static final Rotation2d ELBOW_SETPOINT_HIGH = Rotation2d.fromDegrees(198);
   }
 

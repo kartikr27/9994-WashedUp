@@ -68,8 +68,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void zeroGyro(){
+        gyro.reset();
         gyro.setAngleAdjustment(180.0);
-        // gyro.reset();
+        // 
     }
 
     public double getHeading() {

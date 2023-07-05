@@ -8,12 +8,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elbow;
 import frc.robot.commands.ArmElbowSetpoints;
+import frc.robot.commands.ElbowWait;
 import frc.robot.commands.ReverseSequence;
 import frc.robot.commands.SequentialSetpoint;
 import frc.robot.commands.SwerveDrive;
@@ -85,8 +88,7 @@ public class RobotContainer {
       private final POVButton setBotMidCone = new POVButton(m_controller, 90);
     
       private final POVButton setBotIntake = new POVButton(m_controller, 180);
-      private final POVButton setBotIntake2 = new POVButton(m_controller, 225);
-    
+
       private final POVButton setBotInside = new POVButton(m_controller, 270);
     
       private final JoystickButton substationSetpoint =
@@ -139,26 +141,32 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
 
     resetElbowEncoder.onTrue(new InstantCommand(() -> m_Elbow.resetEncoder()));
-	// armMove.whileTrue(new ControlArm(m_Arm, m_controller));
-    // armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
+	armMove.whileTrue(new ControlArm(m_Arm, m_controller));
+    armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
 
-	// elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
-	// elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
 
 
   runIntake.whileTrue(new RunIntake(m_Intake));
   reverseIntake.whileTrue(new ReverseIntake(m_Intake));
 
-//   setBotHigh.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
-
   setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
 
   setBotHigh.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
 
-  setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+  // setBotHigh.whileTrue(new ParallelCommandGroup(new SetArm(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH),new ElbowWait(m_Arm, m_Elbow,Constants.Elbow.ELBOW_SETPOINT_HIGH)));
+
+  // setBotMidCone.whileTrue(new ParallelCommandGroup(new SetArm(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE),new ElbowWait(m_Arm, m_Elbow,Constants.Elbow.ELBOW_SETPOINT_MID_CONE)));
+    setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+  setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
 
   setBotIntake.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
 
+  setBotIntake.and(cubeModify).whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CUBE));
+  
+
+  substationSetpoint.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_SINGLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_SINGLE_SUBSTATION));
 
 
 
@@ -168,10 +176,6 @@ public class RobotContainer {
 
 
 
-  // All setpoints
-
-//   setBotMidCone.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
-//   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
 
 
 	
