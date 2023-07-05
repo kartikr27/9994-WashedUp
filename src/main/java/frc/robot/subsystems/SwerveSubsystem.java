@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -71,6 +72,20 @@ public class SwerveSubsystem extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
+        m_swerveModules = new SwerveModule[]{frontLeft, frontRight, backLeft, backRight};
+        m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, getYaw(), getPositions());
+
+		m_poseEstimator =
+			new SwerveDrivePoseEstimator(
+				DriveConstants.kDriveKinematics,
+				getYaw(),
+				getModulePositions(),
+				new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+
+		m_field = new Field2d();
+        
+		SmartDashboard.putData("Field", m_field);
     }
 
     public void zeroHeading() {
@@ -125,6 +140,16 @@ public class SwerveSubsystem extends SubsystemBase {
 		return positions;
 	}
 
+    public SwerveModulePosition[] getModulePositions() {
+		SwerveModulePosition[] positions = new SwerveModulePosition[4];
+
+		for (SwerveModule mod: m_swerveModules) {
+			positions[mod.moduleNumber] = mod.getPosition();
+		}
+
+		return positions;
+	}
+
     public void drive(double xSpeed, double ySpeed, double theta, boolean fieldRelative) {
         ChassisSpeeds chassisSpeeds;
         if (fieldRelative) {
@@ -142,6 +167,10 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        m_odometry.update(getYaw(), getPositions());
+		m_field.setRobotPose(getPose());
+		m_poseEstimator.update(getYaw(), getModulePositions());
+        
         SmartDashboard.putNumber("Robot Heading", getHeading());
 
         SmartDashboard.putNumber(
