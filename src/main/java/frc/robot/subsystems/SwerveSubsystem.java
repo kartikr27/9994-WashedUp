@@ -84,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase {
 				new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
 
 		m_field = new Field2d();
-        
+
 		SmartDashboard.putData("Field", m_field);
     }
 
@@ -150,6 +150,16 @@ public class SwerveSubsystem extends SubsystemBase {
 		return positions;
 	}
 
+    public SwerveModuleState[] getStates() {
+		SwerveModuleState[] states = new SwerveModuleState[4];
+
+		for (SwerveModule mod: m_swerveModules) {
+			states[mod.moduleNumber] = mod.getState();
+		}
+
+		return states;
+	}
+    
     public void drive(double xSpeed, double ySpeed, double theta, boolean fieldRelative) {
         ChassisSpeeds chassisSpeeds;
         if (fieldRelative) {
