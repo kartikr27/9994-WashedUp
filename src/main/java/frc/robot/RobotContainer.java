@@ -118,7 +118,12 @@ public class RobotContainer {
   private final AutoBase autoBase = new AutoBase(swerveSubsystem);
   private final SwerveAutoBuilder autoBuilder;
   private static Map<String, Command> eventMap;
-  private final PathPlannerTrajectory flat2Piece = PathPlanner.loadPath("Flat 2 Piece", 1, 3);
+
+  private final PathPlannerTrajectory flat2Piece = 
+                PathPlanner.loadPath("Flat 2 Piece", 1, 3);
+  
+  private final PathPlannerTrajectory charge1ConeBalance = 
+                PathPlanner.loadPath("Charge 1 Piece Bal", 1, 3);             
 
 
   public RobotContainer() {
@@ -213,7 +218,8 @@ public class RobotContainer {
 //   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
   }
 public void configureSmartDashboard() {
-    m_Chooser.addOption("Flat 2 Piece", flat2Piece);
+    m_Chooser.addOption("Flat Side: 2 Piece", flat2Piece);
+    m_Chooser.addOption("Charge Station: 1 Piece+Balance", charge1ConeBalance);
     SmartDashboard.putData("Auto Choices", m_Chooser);
 }
   /**
