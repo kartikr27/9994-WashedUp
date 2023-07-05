@@ -16,8 +16,12 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "setHigh",
+          "Eject",
+          "setStow"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -63,12 +67,35 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "setHigh",
+          "Eject",
+          "setStow"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.711931818181818,
+      "names": [
+        "setIntake"
+      ]
+    },
+    {
+      "position": 0.7508522727272728,
+      "names": [
+        "Intake"
+      ]
+    },
+    {
+      "position": 1.2859375000000006,
+      "names": [
+        "setStow"
+      ]
+    }
+  ]
 }

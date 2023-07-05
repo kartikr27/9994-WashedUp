@@ -5,9 +5,17 @@
 package frc.robot;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -26,6 +34,9 @@ import frc.robot.commands.Elbow.SetElbow;
 import frc.robot.commands.Intake.IdleIntake;
 import frc.robot.commands.Intake.ReverseIntake;
 import frc.robot.commands.Intake.RunIntake;
+import frc.robot.commands.Intake.TimedIntake;
+import frc.robot.commands.Intake.TimedIntake.Direction;
+import frc.robot.commands.auto.AutoBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Intake;
@@ -98,6 +109,13 @@ public class RobotContainer {
   private final Arm m_Arm = new Arm();
   private final Elbow m_Elbow = new Elbow();
   private final Intake m_Intake = new Intake();
+  
+  /* Autonomous */
+  private final AutoBase autoBase = new AutoBase(swerveSubsystem);
+  private final SwerveAutoBuilder autoBuilder;
+  private static Map<String, Command> eventMap;
+  private final PathPlannerTrajectory flat2Piece = PathPlanner.loadPath("Flat 2 Piece", 1, 3);
+
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -112,12 +130,37 @@ public class RobotContainer {
     configureBindings();
 
     m_Intake.setDefaultCommand(new IdleIntake(m_Intake));
-
     m_Arm.setDefaultCommand(new IdleArm(m_Arm));
     m_Elbow.setDefaultCommand(new IdleElbow(m_Elbow));
 
-
+    /* Autonomous */
+    configureAutonomousEvents();
     
+    autoBuilder = autoBase.getSwerveAutoBuilder(eventMap);
+  }
+
+  private void configureAutonomousEvents() {
+    eventMap = new HashMap<>();
+
+    eventMap.put(
+            "Eject",
+            new TimedIntake(m_Intake, .5, Direction.OUTTAKE));
+
+    eventMap.put(
+            "Intake",
+            new TimedIntake(m_Intake, 2.0, Direction.INTAKE));
+    
+    eventMap.put(
+            "setHigh", 
+            new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
+
+    eventMap.put(
+            "setStow", 
+            new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
+    
+    eventMap.put(
+            "setIntake", 
+            new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
   }
 
   /**
@@ -131,7 +174,6 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
