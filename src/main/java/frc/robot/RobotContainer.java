@@ -39,6 +39,7 @@ import frc.robot.commands.Intake.ReverseIntake;
 import frc.robot.commands.Intake.RunIntake;
 import frc.robot.commands.Intake.TimedIntake;
 import frc.robot.commands.Intake.TimedIntake.Direction;
+import frc.robot.commands.auto.AutoBalancing;
 import frc.robot.commands.auto.AutoBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants.OIConstants;
@@ -152,6 +153,10 @@ public class RobotContainer {
 
   private void configureAutonomousEvents() {
     eventMap = new HashMap<>();
+
+    eventMap.put(
+            "AutoBalance",
+            new AutoBalancing(m_Swerve));
 
     eventMap.put(
             "Eject",
