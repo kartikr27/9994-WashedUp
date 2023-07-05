@@ -5,13 +5,13 @@
 package frc.robot.commands.auto;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -29,7 +29,7 @@ public class AutoBase extends SequentialCommandGroup {
     addCommands();
   }
 
-  public SwerveAutoBuilder getSwerveAutoBuilder(HashMap<String, Command> AutoEventMap) {
+  public SwerveAutoBuilder getSwerveAutoBuilder(Map<String, Command> eventMap) {
     return new SwerveAutoBuilder(
       m_drivetrain::getPose, // pose2d supplier
       m_drivetrain::resetOdometry, // reset odometry at the beginning of auto
@@ -37,7 +37,7 @@ public class AutoBase extends SequentialCommandGroup {
       new PIDConstants(0, 0, 0), // x y controller
       new PIDConstants(0, 0, 0), // theta controller
       m_drivetrain::setModuleStates,
-      AutoEventMap,
+      eventMap,
       true,
       m_drivetrain);
   }

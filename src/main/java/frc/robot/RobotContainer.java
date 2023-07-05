@@ -108,14 +108,14 @@ public class RobotContainer {
 
 
 
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final SwerveSubsystem m_Swerve = new SwerveSubsystem();
   private final Arm m_Arm = new Arm();
   private final Elbow m_Elbow = new Elbow();
   private final Intake m_Intake = new Intake();
   
   /* Autonomous */
   private final SendableChooser<PathPlannerTrajectory> m_Chooser = new SendableChooser<>();
-  private final AutoBase autoBase = new AutoBase(swerveSubsystem);
+  private final AutoBase autoBase = new AutoBase(m_Swerve);
   private final SwerveAutoBuilder autoBuilder;
   private static Map<String, Command> eventMap;
 
@@ -129,8 +129,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     boolean fieldRelative = true;
-    swerveSubsystem.setDefaultCommand(new SwerveDrive(
-        swerveSubsystem,
+    m_Swerve.setDefaultCommand(new SwerveDrive(
+        m_Swerve,
         () -> -d_controller.getRawAxis(OIConstants.kDriverYAxis),
         () -> -d_controller.getRawAxis(OIConstants.kDriverXAxis),
         () -> d_controller.getRawAxis(OIConstants.kDriverRotAxis), 
@@ -189,7 +189,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
-    zeroGyro.onTrue(new InstantCommand(() -> swerveSubsystem.zeroGyro()));
+    zeroGyro.onTrue(new InstantCommand(() -> m_Swerve.zeroGyro()));
 
     resetElbowEncoder.onTrue(new InstantCommand(() -> m_Elbow.resetEncoder()));
 	// armMove.whileTrue(new ControlArm(m_Arm, m_controller));
@@ -231,7 +231,7 @@ public void configureSmartDashboard() {
     // Executes the autonomous command chosen in smart dashboard
     return new ParallelCommandGroup(
             new InstantCommand(
-                    () -> swerveSubsystem.getField().getObject("Field").setTrajectory(m_Chooser.getSelected())),
+                    () -> m_Swerve.getField().getObject("Field").setTrajectory(m_Chooser.getSelected())),
             autoBuilder.fullAuto(m_Chooser.getSelected()));
 }
 }
