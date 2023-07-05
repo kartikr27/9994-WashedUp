@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -11,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -52,8 +56,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final AHRS gyro = new AHRS(Port.kMXP);
 
+    public PIDController thetaController;
+
 
     public SwerveSubsystem() {
+        thetaController =
+        new PIDController(
+            Constants.Autonomous.DRIVE_CONTROLLER_ROTATION_KP,
+            Constants.Autonomous.DRIVE_CONTROLLER_ROTATION_KI,
+            Constants.Autonomous.DRIVE_CONTROLLER_ROTATION_KD);
+            
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -70,8 +82,19 @@ public class SwerveSubsystem extends SubsystemBase {
     public void zeroGyro(){
         gyro.reset();
         gyro.setAngleAdjustment(180.0);
-        // 
+        
     }
+    public double getPitch() {
+        return gyro.getPitch();
+      }
+    
+      public double getPitchVelocity() {
+        return gyro.getRawGyroX();
+      }
+    
+      public double getRollVelocity() {
+        return gyro.getRawGyroY();
+      }
 
     public double getHeading() {
         return Math.IEEEremainder(gyro.getAngle(), 360);
@@ -96,6 +119,17 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(moduleStates);
     }
+    public double calculteTheta(double goalAngleRadians) {
+        return thetaController.calculate(getHeading(), goalAngleRadians);
+      }
+    
+      public DoubleSupplier calculateThetaSupplier(DoubleSupplier goalAngleSupplierRadians) {
+        return () -> calculteTheta(goalAngleSupplierRadians.getAsDouble());
+      }
+    
+      public DoubleSupplier calculteThetaSupplier(double goalAngle) {
+        return calculateThetaSupplier(() -> goalAngle);
+      }
 
     @Override
     public void periodic() {
