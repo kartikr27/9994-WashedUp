@@ -13,8 +13,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -111,6 +114,7 @@ public class RobotContainer {
   private final Intake m_Intake = new Intake();
   
   /* Autonomous */
+  private final SendableChooser<PathPlannerTrajectory> m_Chooser = new SendableChooser<>();
   private final AutoBase autoBase = new AutoBase(swerveSubsystem);
   private final SwerveAutoBuilder autoBuilder;
   private static Map<String, Command> eventMap;
@@ -134,6 +138,8 @@ public class RobotContainer {
     m_Elbow.setDefaultCommand(new IdleElbow(m_Elbow));
 
     /* Autonomous */
+    configureSmartDashboard();
+
     configureAutonomousEvents();
     
     autoBuilder = autoBase.getSwerveAutoBuilder(eventMap);
@@ -201,28 +207,25 @@ public class RobotContainer {
 
   setBotIntake.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
 
-
-
-
-
-
-
-
-
-
   // All setpoints
 
 //   setBotMidCone.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
 //   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
-
-
-	
   }
-
+public void configureSmartDashboard() {
+    m_Chooser.addOption("Flat 2 Piece", flat2Piece);
+    SmartDashboard.putData("Auto Choices", m_Chooser);
+}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-
+  public Command getAutonomousCommand() {
+    // Executes the autonomous command chosen in smart dashboard
+    return new ParallelCommandGroup(
+            new InstantCommand(
+                    () -> swerveSubsystem.getField().getObject("Field").setTrajectory(m_Chooser.getSelected())),
+            autoBuilder.fullAuto(m_Chooser.getSelected()));
+}
 }
