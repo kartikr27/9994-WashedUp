@@ -36,7 +36,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftTurningEncoderReversed,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed,
+            true);
 
     private final SwerveModule frontRight = new SwerveModule(1,
             DriveConstants.kFrontRightDriveMotorPort,
@@ -45,7 +46,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontRightTurningEncoderReversed,
             DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
+            DriveConstants.kFrontRightDriveAbsoluteEncoderReversed,
+            true);
 
     private final SwerveModule backLeft = new SwerveModule(2,
             DriveConstants.kBackLeftDriveMotorPort,
@@ -54,7 +56,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackLeftTurningEncoderReversed,
             DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.kBackLeftDriveAbsoluteEncoderReversed,
+            true);
 
     private final SwerveModule backRight = new SwerveModule(3,
             DriveConstants.kBackRightDriveMotorPort,
@@ -63,7 +66,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightTurningEncoderReversed,
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+            DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
+            true);
 
 
     public SwerveSubsystem() {

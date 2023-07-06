@@ -10,6 +10,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
@@ -25,9 +28,13 @@ public class SwerveModule {
     private CANCoder absoluteEncoder;
     private boolean absoluteEncoderReversed;
     private double absoluteEncoderOffsetRad;
+    private CANCoderConfiguration EncoderConfig;
+
 
     private PIDController drivePIDController;
     private PIDController turningPIDController;
+
+    private boolean deg;
 
     public SwerveModule(
             int moduleNumber,
@@ -37,7 +44,8 @@ public class SwerveModule {
             boolean turningMotorReversed,
             int absoluteEncoderID,
             double absoluteEncoderOffset,
-            boolean absoluteEncoderReversed) {
+            boolean absoluteEncoderReversed,
+            boolean deg) {
 
         this.moduleNumber = moduleNumber;
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
@@ -61,8 +69,16 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
 
+
         turningPIDController = new PIDController(ModuleConstants.kTurnP, 0, 0);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        this.deg = deg;
+
+        EncoderConfig = new CANCoderConfiguration();
+        EncoderConfig.sensorCoefficient = 360 / 4096.0;
+        EncoderConfig.unitString = "deg";
+        EncoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+        absoluteEncoder.configAllSettings(EncoderConfig);
 
         resetEncoders();
     }
@@ -100,9 +116,18 @@ public class SwerveModule {
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }
 
+
     public void resetEncoders() {
         drivingEncoder.setPosition(0);
+        if(deg){
         turningEncoder.setPosition(getAbsoluteEncoderRad());
+        }
+        else{
+            double angle = absoluteEncoder.getAbsolutePosition();
+            // angle = Math.toRadians(angle);
+            angle -= absoluteEncoderOffsetRad;
+            turningEncoder.setPosition( angle * (absoluteEncoderReversed ? -1.0 : 1.0));
+        }
     }
 
     public SwerveModuleState getState() {

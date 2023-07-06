@@ -82,10 +82,10 @@ public static final class DriveConstants {
     public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
     public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(152.49); 
-    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(90.35); 
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(135.6); 
-    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(338.994); 
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(332.578-180); 
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(269.38-180); 
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(133.59);
+    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(339.25); 
 
     //Physical
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5.8;
