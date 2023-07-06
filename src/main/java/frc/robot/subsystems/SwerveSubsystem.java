@@ -93,8 +93,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void zeroGyro(){
+        m_gyro.reset();
         m_gyro.setAngleAdjustment(180.0);
-        // gyro.reset();
+        // 
     }
 
     public double getHeading() {
@@ -121,6 +122,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("pose X", m_odometry.getPoseMeters().getX());
 		SmartDashboard.putNumber("pose Y", m_odometry.getPoseMeters().getY());
 		SmartDashboard.putNumber("gyro angle", getYaw().getDegrees());
+        SmartDashboard.putNumber("neo current ",frontLeft.getCurrentDrive());
 		return m_odometry.getPoseMeters();
 	}
 

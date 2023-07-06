@@ -82,17 +82,17 @@ public static final class DriveConstants {
     public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
     public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(332.31); 
-    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(269.47); 
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(315.087); 
-    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(159.61); 
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(152.49); 
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(90.35); 
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(135.6); 
+    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(338.994); 
 
     //Physical
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5.8;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
     //Speed and Accel
-    public static final double kTeleDriveMaxSpeedMultiplier = 0.5;
+    public static final double kTeleDriveMaxSpeedMultiplier = 1.0;
     public static final double kTeleDriveMaxAnglularSpeedMultiplier = 0.5;
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * kTeleDriveMaxSpeedMultiplier;
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * kTeleDriveMaxAnglularSpeedMultiplier;
@@ -108,7 +108,7 @@ public static final class OIConstants {
   public static final int kDriverRotAxis = 4;
   public static final int kDriverFieldOrientedButtonIdx = 1;
 
-  public static final double kDeadband = 0.05;
+  public static final double kDeadband = 0.1;
 }
   
   public static final class Arm{
@@ -141,7 +141,7 @@ public static final class OIConstants {
 
     // Setpoints
 
-    public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(170);
+    public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(188);
     public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(180);
 
     public static final Rotation2d ARM_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(230
@@ -151,12 +151,12 @@ public static final class OIConstants {
         public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CUBE =
         Rotation2d.fromDegrees(191); 
     public static final Rotation2d ARM_SETPOINT_MID_CONE = Rotation2d.fromDegrees(60);
-    public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(176);
-    public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(60);
+    public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(154);
+    public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(63);
   } 
   public static final class Elbow {
-    public static final double P = 10.2;
-    public static final double I = 1.2;
+    public static final double P = 11.2;
+    public static final double I = 2.7;
     public static final double D = 0.0;
     public static final int ElbowMotor = 11;
 
@@ -172,18 +172,18 @@ public static final class OIConstants {
     public static final double kA = 0.0;
     
 
-    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(-20);
+    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(43);
     public static final Rotation2d ELBOW_SETPOINT_BOT = Rotation2d.fromDegrees(1.0);
 
     public static final Rotation2d ELBOW_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(218);
     public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CONE =
-        Rotation2d.fromDegrees(156); 
+        Rotation2d.fromDegrees(167); 
 
         public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CUBE =
-        Rotation2d.fromDegrees(149); 
-    public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(116);
-    public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(-29);
-    public static final Rotation2d ELBOW_SETPOINT_HIGH = Rotation2d.fromDegrees(198);
+        Rotation2d.fromDegrees(140); 
+    public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(110);
+    public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(-77.6);
+    public static final Rotation2d ELBOW_SETPOINT_HIGH = Rotation2d.fromDegrees(195);
   }
 
   public static final class Intake {

@@ -27,7 +27,7 @@ import frc.robot.subsystems.Elbow;
 import frc.robot.commands.ArmElbowSetpoints;
 import frc.robot.commands.ReverseSequence;
 import frc.robot.commands.SequentialSetpoint;
-import frc.robot.commands.SwerveDrive;
+import frc.robot.commands.Drivetrain.SwerveDrive;
 import frc.robot.commands.Arm.ControlArm;
 import frc.robot.commands.Arm.IdleArm;
 import frc.robot.commands.Arm.SetArm;
@@ -197,30 +197,33 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> m_Swerve.zeroGyro()));
 
     resetElbowEncoder.onTrue(new InstantCommand(() -> m_Elbow.resetEncoder()));
-	// armMove.whileTrue(new ControlArm(m_Arm, m_controller));
-    // armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
+	armMove.whileTrue(new ControlArm(m_Arm, m_controller));
+    armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
 
-	// elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
-	// elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
 
 
   runIntake.whileTrue(new RunIntake(m_Intake));
-  reverseIntake.whileTrue(new ReverseIntake(m_Intake));
 
-//   setBotHigh.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
+  reverseIntake.whileTrue(new ReverseIntake(m_Intake));
 
   setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
 
   setBotHigh.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
 
-  setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+  
+    setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+  setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
 
   setBotIntake.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
 
-  // All setpoints
+  setBotIntake.and(cubeModify).whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CUBE));
+  
 
-//   setBotMidCone.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
-//   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
+  substationSetpoint.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_SINGLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_SINGLE_SUBSTATION));
+
+  
   }
 public void configureSmartDashboard() {
     m_Chooser.addOption("Flat Side: 2 Piece", flat2Piece);
