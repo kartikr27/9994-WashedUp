@@ -62,7 +62,9 @@ public class RobotContainer {
   public final XboxController d_controller = new XboxController(0);
   public final XboxController m_controller = new XboxController(1);
 
+  CommandXboxController d_controllerCommand = new CommandXboxController(0);
   CommandXboxController m_controllerCommand = new CommandXboxController(1);
+
 
 
 
@@ -78,34 +80,40 @@ public class RobotContainer {
   private final JoystickButton zeroGyro =
       new JoystickButton(d_controller, XboxController.Button.kA.value);
 
+      private final JoystickButton reverseIntake =
+      new JoystickButton(d_controller, XboxController.Button.kB.value);
+
       private final JoystickButton resetElbowEncoder =
       new JoystickButton(m_controller, XboxController.Button.kA.value);
-  private final JoystickButton robotCentric =
-      new JoystickButton(d_controller, XboxController.Button.kLeftBumper.value);
+
 
       private final JoystickButton runIntake =
       new JoystickButton(m_controller, XboxController.Button.kX.value);
 
-  private final JoystickButton reverseIntake =
-      new JoystickButton(m_controller, XboxController.Button.kB.value);
+  
 
       private final int cubeModifyAxis = XboxController.Axis.kRightTrigger.value;
       private final Trigger cubeModify = m_controllerCommand.axisGreaterThan(cubeModifyAxis, 0.2);
 
+      private final int manualControl = XboxController.Axis.kLeftTrigger.value;
+      private final Trigger manualControlAxis = m_controllerCommand.axisGreaterThan(manualControl, 0.2);
 
-
+      private final int creepModeAxis = XboxController.Axis.kRightTrigger.value;
+      private final Trigger creepMode = d_controllerCommand.axisGreaterThan(creepModeAxis, 0.2);
 
       private final POVButton setBotHigh = new POVButton(m_controller, 0);
 
       private final POVButton setBotMidCone = new POVButton(m_controller, 90);
     
       private final POVButton setBotIntake = new POVButton(m_controller, 180);
-      private final POVButton setBotIntake2 = new POVButton(m_controller, 225);
     
       private final POVButton setBotInside = new POVButton(m_controller, 270);
     
-      private final JoystickButton substationSetpoint =
+      private final JoystickButton singleSubstationSetpoint =
           new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+
+        private final JoystickButton doubleSubstationSetpoint =
+          new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
 
 
@@ -197,23 +205,23 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> m_Swerve.zeroGyro()));
 
     resetElbowEncoder.onTrue(new InstantCommand(() -> m_Elbow.resetEncoder()));
-	armMove.whileTrue(new ControlArm(m_Arm, m_controller));
-    armMove2.whileTrue(new ControlArm(m_Arm, m_controller));
+        armMove.and(manualControlAxis).whileTrue(new ControlArm(m_Arm, m_controller));
+    armMove2.and(manualControlAxis).whileTrue(new ControlArm(m_Arm, m_controller));
 
-	elbowMove.whileTrue(new ControlElbow(m_Elbow, m_controller));
-	elbowMove2.whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove.and(manualControlAxis).whileTrue(new ControlElbow(m_Elbow, m_controller));
+	elbowMove2.and(manualControlAxis).whileTrue(new ControlElbow(m_Elbow, m_controller));
 
 
   runIntake.whileTrue(new RunIntake(m_Intake));
 
   reverseIntake.whileTrue(new ReverseIntake(m_Intake));
 
-  setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
-
+  //setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
+setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
   setBotHigh.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_HIGH, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH));
 
   
-    setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
+  setBotMidCone.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CONE));
   setBotMidCone.and(cubeModify).whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_MID_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_MID_CUBE));
 
   setBotIntake.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CONE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CONE));
@@ -221,8 +229,11 @@ public class RobotContainer {
   setBotIntake.and(cubeModify).whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_GROUND_INTAKE_CUBE, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_GROUND_INTAKE_CUBE));
   
 
-  substationSetpoint.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_SINGLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_SINGLE_SUBSTATION));
+  doubleSubstationSetpoint.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_DOUBLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_DOUBLE_SUBSTATION));
+  singleSubstationSetpoint.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_SINGLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_SINGLE_SUBSTATION));
 
+  creepMode.onTrue(new InstantCommand(() -> m_Swerve.creepModeTrue()));
+  creepMode.onFalse(new InstantCommand(() -> m_Swerve.creepModeFalse()));
   
   }
 public void configureSmartDashboard() {

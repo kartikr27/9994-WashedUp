@@ -53,7 +53,7 @@ public class SwerveModule {
         drivingEncoder = drivingMotor.getEncoder();
         turningEncoder = turningMotor.getEncoder();
 
-        drivingMotor.setSmartCurrentLimit(80, 60);
+        drivingMotor.setSmartCurrentLimit(80, 40);
         turningMotor.setSmartCurrentLimit(25);
 
         drivingEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);

@@ -23,6 +23,8 @@ public class SwerveSubsystem extends SubsystemBase {
 	private SwerveDriveOdometry m_odometry;
 	private SwerveModule[] m_swerveModules;
 
+    public boolean creepMode=false;
+
 	private AHRS m_gyro = new AHRS(Port.kMXP);
 
 	private Field2d m_field;
@@ -175,6 +177,13 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(moduleStates);
     }
+    public void creepModeTrue() {
+        creepMode = true;
+}
+
+    public void creepModeFalse() {
+        creepMode = false;
+}
 
     @Override
     public void periodic() {

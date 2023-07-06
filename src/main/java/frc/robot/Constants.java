@@ -93,6 +93,7 @@ public static final class DriveConstants {
 
     //Speed and Accel
     public static final double kTeleDriveMaxSpeedMultiplier = 1.0;
+    public static final double kCreepModeMultiplier = 0.3;
     public static final double kTeleDriveMaxAnglularSpeedMultiplier = 0.5;
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * kTeleDriveMaxSpeedMultiplier;
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * kTeleDriveMaxAnglularSpeedMultiplier;
@@ -127,7 +128,7 @@ public static final class OIConstants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
-    public static final double kMaxVelocityRadiansPerSecond = 4.8;
+    public static final double kMaxVelocityRadiansPerSecond = 5.8;
     public static final double kMaxAccelerationRadiansPerSecondSquared = 8.0;
 
     public static final double kSlowMaxVelocityRadiansPerSecond = 4.2;
@@ -140,6 +141,8 @@ public static final class OIConstants {
     public static final double kA = 0.0;
 
     // Setpoints
+
+    public static final Rotation2d ARM_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(188);
 
     public static final Rotation2d ARM_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(188);
     public static final Rotation2d ARM_SETPOINT_BOT = Rotation2d.fromDegrees(180);
@@ -171,6 +174,8 @@ public static final class OIConstants {
     public static final double kV = 0.0;
     public static final double kA = 0.0;
     
+
+    public static final Rotation2d ELBOW_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(43);
 
     public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(43);
     public static final Rotation2d ELBOW_SETPOINT_BOT = Rotation2d.fromDegrees(1.0);

@@ -34,11 +34,7 @@ private TalonFX intakeMotor2;
 
     intakeMotor2 = new TalonFX(Constants.Intake.intakeMotor);
 
-    // intakeMotor = new CANSparkMax(Constants.Intake.intakeMotor, MotorType.kBrushless);
 
-    // intakeMotor.setInverted(true);
-
-    // intakeMotor.setSmartCurrentLimit(Constants.Intake.intakeCurrentLimit);
 
     intakeTab = Shuffleboard.getTab("Intake");
 
@@ -53,12 +49,11 @@ private TalonFX intakeMotor2;
   }
 
   public void runIntake(double speed) {
-    // intakeMotor.set(speed);
+
     intakeMotor2.set(TalonFXControlMode.PercentOutput, speed);
   }
 
   public void stopIntake() {
-    // intakeMotor.stopMotor();
     intakeMotor2.set(TalonFXControlMode.PercentOutput, 0);
   }
 
