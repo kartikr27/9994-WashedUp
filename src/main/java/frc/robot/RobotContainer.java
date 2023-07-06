@@ -13,9 +13,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -41,6 +43,7 @@ import frc.robot.commands.Intake.TimedIntake;
 import frc.robot.commands.Intake.TimedIntake.Direction;
 import frc.robot.commands.auto.AutoBalancing;
 import frc.robot.commands.auto.AutoBase;
+import frc.robot.commands.auto.OnePieceMobility;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Intake;
@@ -58,6 +61,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+
+  private SendableChooser<CommandBase> autonSelecter;
 
   public final XboxController d_controller = new XboxController(0);
   public final XboxController m_controller = new XboxController(1);
@@ -135,6 +140,7 @@ public class RobotContainer {
                 PathPlanner.loadPath("Charge 1 Piece Bal", 1, 3);             
 
 
+
   public RobotContainer() {
     // Configure the trigger bindings
     boolean fieldRelative = true;
@@ -157,6 +163,12 @@ public class RobotContainer {
     configureAutonomousEvents();
     
     autoBuilder = autoBase.getSwerveAutoBuilder(eventMap);
+
+    autonSelecter = new SendableChooser<>();
+    autonSelecter.setDefaultOption(null, autoBase);
+    autonSelecter.addOption("One Piece Mobility", new OnePieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
+    
+    Shuffleboard.getTab("Auton").add(autonSelecter);
   }
 
   private void configureAutonomousEvents() {
@@ -252,5 +264,9 @@ public void configureSmartDashboard() {
             new InstantCommand(
                     () -> m_Swerve.getField().getObject("Field").setTrajectory(m_Chooser.getSelected())),
             autoBuilder.fullAuto(m_Chooser.getSelected()));
+}
+
+public Command getJankAuton(){
+        return autonSelecter.getSelected();
 }
 }

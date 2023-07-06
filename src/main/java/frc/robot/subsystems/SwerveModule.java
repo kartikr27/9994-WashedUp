@@ -10,9 +10,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
@@ -28,8 +25,6 @@ public class SwerveModule {
     private CANCoder absoluteEncoder;
     private boolean absoluteEncoderReversed;
     private double absoluteEncoderOffsetRad;
-    private CANCoderConfiguration EncoderConfig;
-
 
     private PIDController drivePIDController;
     private PIDController turningPIDController;
@@ -73,12 +68,6 @@ public class SwerveModule {
         turningPIDController = new PIDController(ModuleConstants.kTurnP, 0, 0);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         this.deg = deg;
-
-        EncoderConfig = new CANCoderConfiguration();
-        EncoderConfig.sensorCoefficient = 360 / 4096.0;
-        EncoderConfig.unitString = "deg";
-        EncoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-        absoluteEncoder.configAllSettings(EncoderConfig);
 
         resetEncoders();
     }

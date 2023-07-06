@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -100,8 +101,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroGyro(){
         m_gyro.reset();
-        m_gyro.setAngleAdjustment(180.0);
+        // m_gyro.setAngleAdjustment(180.0);
         // 
+    }
+    public void setPose(Pose2d pose){
+        m_odometry.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     public double getHeading() {
@@ -111,6 +115,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(-getHeading());
     }
+
 
     public Rotation2d getYaw() {
 		return Rotation2d.fromDegrees(-m_gyro.getAngle());
@@ -222,5 +227,10 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+    public CommandBase driveCommandBase(double xSpeed,double ySpeed, double turnSpeed,boolean fieldRelative){
+        return this.run(() -> {
+            drive(xSpeed, ySpeed, turnSpeed, fieldRelative);
+        });
     }
 }
