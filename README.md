@@ -1,1 +1,1 @@
-![IMG-9990](https://github.com/kartikr27/9994-WashedUp/assets/59540128/76a931a6-c1a2-4245-83e8-91fbc302e53d)
+![IMG-9990](https://github.com/kartikr27/9994-WashedUp/assets/59540128/496f4571-b564-4538-bd8b-eb2d17fd73c9)
