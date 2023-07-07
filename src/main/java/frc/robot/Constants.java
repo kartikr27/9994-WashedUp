@@ -196,6 +196,9 @@ public static final class OIConstants {
     public static final double I = 0;
     public static final double D = 0;
     public static final int intakeMotor = 25;
+    public static final double coneIntakeSpeed = 1.0;
+    public static final double cubeIntakeSpeed = 0.4;
+    public static final double reverseIntakeSpeed = -1.0;
 
   }
   public static final class Autonomous {
@@ -204,18 +207,18 @@ public static final class OIConstants {
     public static final double DRIVE_CONTROLLER_ROTATION_KI = 0.0;
     public static final double DRIVE_CONTROLLER_ROTATION_KD = 0.0;
     
-    // TODO: Tune this
     public static final double AUTO_BALANCE_SPEED = 0.35;
-    public static final double AUTO_BALANCE_GROUND_SPEED = 1.1;
-    public static final double AUTO_BALANCE_GROUND_ANGLE_THRESHOLD = 14;
-    public static final double AUTO_BALANCE_VELOCITY_THRESHOLD = 4.5;
-    public static final double AUTO_BALANCE_GROUND_VELOCITY_THRESHOLD = 4.0;
-    public static final double AUTO_BALANCE_POSITION_THRESHOLD = 3.0;
+        public static final double AUTO_BALANCE_GROUND_SPEED = 1.1;
+        public static final double AUTO_BALANCE_GROUND_ANGLE_THRESHOLD = 8;
+        public static final double AUTO_BALANCE_VELOCITY_THRESHOLD = 4.5;
+        public static final double AUTO_BALANCE_GROUND_VELOCITY_THRESHOLD = 4.0;
+        public static final double AUTO_BALANCE_POSITION_THRESHOLD = 3.0;
 
-    public static final double AUTO_BALANCE_P_START = 0.051;
-    public static final double AUTO_BALANCE_P_MULTIPLIER = 0.8;
+        public static final double AUTO_BALANCE_P_START = 0.051;
+        public static final double AUTO_BALANCE_P_MULTIPLIER = 0.8;
 
-    public static final double balancedAngle = 0; // The angle the robot should be at when balanced
+        public static final double balancedAngle = 0; // The angle the robot should be at when balanced
+
     public static final double kP = 0.073; // The proportional constant for the PID controller
     public static final double angleSetPoint =
         0; // The angle the PID controller should try to reach

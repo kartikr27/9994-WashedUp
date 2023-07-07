@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import frc.robot.commands.ReverseSequence;
 import frc.robot.commands.SequentialSetpoint;
 import frc.robot.commands.Drivetrain.SwerveDrive;
-import frc.robot.commands.Intake.ReverseIntake;
+import frc.robot.commands.Intake.RunIntake;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elbow;
 import frc.robot.subsystems.Intake;
@@ -24,6 +24,6 @@ public class OnePieceMobility extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-    addCommands(new SequentialSetpoint(arm, Constants.Arm.ARM_SETPOINT_HIGH, elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH),new ReverseIntake(intake).withTimeout(2),new ReverseSequence(arm, Constants.Arm.ARM_SETPOINT_BOT, elbow, Constants.Elbow.ELBOW_SETPOINT_BOT),swerve.driveCommandBase(2.0, 0, 0, true).until(() -> {return swerve.getPose().getX()>5.0;}));
+    addCommands(new SequentialSetpoint(arm, Constants.Arm.ARM_SETPOINT_HIGH, elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH),new RunIntake(intake,Constants.Intake.reverseIntakeSpeed).withTimeout(2),new ReverseSequence(arm, Constants.Arm.ARM_SETPOINT_BOT, elbow, Constants.Elbow.ELBOW_SETPOINT_BOT),swerve.driveCommandBase(2.0, 0, 0, true).until(() -> {return swerve.getPose().getX()>5.0;}));
   }
 }

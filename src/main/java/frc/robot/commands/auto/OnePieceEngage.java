@@ -5,15 +5,24 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.commands.ReverseSequence;
+import frc.robot.commands.SequentialSetpoint;
+import frc.robot.commands.Drivetrain.AutoBalance;
+import frc.robot.commands.Intake.RunIntake;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Elbow;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.SwerveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class OnePieceEngage extends SequentialCommandGroup {
   /** Creates a new OnePieceEngage. */
-  public OnePieceEngage() {
+  public OnePieceEngage(SwerveSubsystem swerve,Arm arm,Elbow elbow,Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(new SequentialSetpoint(arm, Constants.Arm.ARM_SETPOINT_HIGH, elbow, Constants.Elbow.ELBOW_SETPOINT_HIGH),new RunIntake(intake,Constants.Intake.reverseIntakeSpeed).withTimeout(2),new ReverseSequence(arm, Constants.Arm.ARM_SETPOINT_BOT, elbow, Constants.Elbow.ELBOW_SETPOINT_BOT),new AutoBalance(swerve,false));
   }
 }
