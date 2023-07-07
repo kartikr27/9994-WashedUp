@@ -51,13 +51,16 @@ public class SwerveDrive extends CommandBase {
         ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         theta = turningLimiter.calculate(theta)
                 * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-                swerveSubsystem.drive(xSpeed, ySpeed, theta, fieldRelative);
-
+        
         if(swerveSubsystem.creepMode){
-            xSpeed *= DriveConstants.kCreepModeMultiplier;
-            ySpeed *= DriveConstants.kCreepModeMultiplier;
-            theta *= DriveConstants.kCreepModeMultiplier;
+                xSpeed *= DriveConstants.kCreepModeMultiplier;
+                ySpeed *= DriveConstants.kCreepModeMultiplier;
+                theta *= DriveConstants.kCreepModeMultiplier;
         }
+
+        swerveSubsystem.drive(xSpeed, ySpeed, theta, fieldRelative);
+
+        
     }
 
     @Override

@@ -72,7 +72,6 @@ public class RobotContainer {
 
 
 
-
   private final int armAxis = XboxController.Axis.kLeftY.value;
   private final int elbowAxis = XboxController.Axis.kRightY.value;
   
@@ -244,8 +243,8 @@ setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_B
   doubleSubstationSetpoint.whileTrue(new SequentialSetpoint(m_Arm, Constants.Arm.ARM_SETPOINT_DOUBLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_DOUBLE_SUBSTATION));
   singleSubstationSetpoint.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_SINGLE_SUBSTATION, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_SINGLE_SUBSTATION));
 
-  creepMode.onTrue(new InstantCommand(() -> m_Swerve.creepModeTrue()));
-  creepMode.onFalse(new InstantCommand(() -> m_Swerve.creepModeFalse()));
+  d_controllerCommand.leftBumper().onTrue(new InstantCommand(() -> m_Swerve.creepModeTrue()));
+  d_controllerCommand.leftBumper().onFalse(new InstantCommand(() -> m_Swerve.creepModeFalse()));
   
   }
 public void configureSmartDashboard() {
