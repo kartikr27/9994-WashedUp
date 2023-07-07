@@ -84,7 +84,7 @@ public static final class DriveConstants {
 
     public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(332.578-180); 
     public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(269.38-180); 
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(133.59);
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(315.966-180);
     public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(339.25); 
 
     //Physical

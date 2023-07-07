@@ -85,8 +85,6 @@ public class RobotContainer {
   private final JoystickButton zeroGyro =
       new JoystickButton(d_controller, XboxController.Button.kA.value);
 
-      private final JoystickButton reverseIntake =
-      new JoystickButton(d_controller, XboxController.Button.kB.value);
 
       private final JoystickButton resetElbowEncoder =
       new JoystickButton(m_controller, XboxController.Button.kA.value);
@@ -105,6 +103,9 @@ public class RobotContainer {
 
       private final int creepModeAxis = XboxController.Axis.kRightTrigger.value;
       private final Trigger creepMode = d_controllerCommand.axisGreaterThan(creepModeAxis, 0.2);
+
+      private final int outtakeAxis = XboxController.Axis.kLeftTrigger.value;
+      private final Trigger outtake = d_controllerCommand.axisGreaterThan(manualControl, 0.2);
 
       private final POVButton setBotHigh = new POVButton(m_controller, 0);
 
@@ -148,7 +149,7 @@ public class RobotContainer {
         m_Swerve,
         () -> -d_controller.getRawAxis(OIConstants.kDriverYAxis),
         () -> -d_controller.getRawAxis(OIConstants.kDriverXAxis),
-        () -> d_controller.getRawAxis(OIConstants.kDriverRotAxis), 
+        () -> -d_controller.getRawAxis(OIConstants.kDriverRotAxis), 
         fieldRelative));
 
     configureBindings();
@@ -165,7 +166,6 @@ public class RobotContainer {
     autoBuilder = autoBase.getSwerveAutoBuilder(eventMap);
 
     autonSelecter = new SendableChooser<>();
-    autonSelecter.setDefaultOption(null, autoBase);
     autonSelecter.addOption("One Piece Mobility", new OnePieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
     
     Shuffleboard.getTab("Auton").add(autonSelecter);
@@ -226,7 +226,7 @@ public class RobotContainer {
 
   runIntake.whileTrue(new RunIntake(m_Intake));
 
-  reverseIntake.whileTrue(new ReverseIntake(m_Intake));
+  outtake.whileTrue(new ReverseIntake(m_Intake));
 
   //setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
 setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
