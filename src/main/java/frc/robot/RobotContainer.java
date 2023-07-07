@@ -225,7 +225,7 @@ public class RobotContainer {
 
   runIntake.whileTrue(new RunIntake(m_Intake));
 
-  reverseIntake.whileTrue(new ReverseIntake(m_Intake));
+  d_controllerCommand.rightTrigger().whileTrue(new ReverseIntake(m_Intake));
 
   //setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
 setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
