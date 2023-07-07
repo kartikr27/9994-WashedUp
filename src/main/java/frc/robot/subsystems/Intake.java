@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -34,12 +35,11 @@ private TalonFX intakeMotor2;
 
     intakeMotor2 = new TalonFX(Constants.Intake.intakeMotor);
 
-
-
+    intakeMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 0, 0));
     intakeTab = Shuffleboard.getTab("Intake");
 
-    // currentIntakeEntry =
-    //     intakeTab.add("Current Output Intake", intakeMotor.getOutputCurrent()).getEntry();
+    currentIntakeEntry =
+        intakeTab.add("Current Output Intake", intakeMotor2.getStatorCurrent()).getEntry();
   }
 
   @Override

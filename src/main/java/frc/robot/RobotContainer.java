@@ -37,7 +37,6 @@ import frc.robot.commands.Elbow.ControlElbow;
 import frc.robot.commands.Elbow.IdleElbow;
 import frc.robot.commands.Elbow.SetElbow;
 import frc.robot.commands.Intake.IdleIntake;
-import frc.robot.commands.Intake.ReverseIntake;
 import frc.robot.commands.Intake.RunIntake;
 import frc.robot.commands.Intake.TimedIntake;
 import frc.robot.commands.Intake.TimedIntake.Direction;
@@ -100,11 +99,9 @@ public class RobotContainer {
       private final int manualControl = XboxController.Axis.kLeftTrigger.value;
       private final Trigger manualControlAxis = m_controllerCommand.axisGreaterThan(manualControl, 0.2);
 
-      private final int creepModeAxis = XboxController.Axis.kRightTrigger.value;
-      private final Trigger creepMode = d_controllerCommand.axisGreaterThan(creepModeAxis, 0.2);
 
-      private final int outtakeAxis = XboxController.Axis.kLeftTrigger.value;
-      private final Trigger outtake = d_controllerCommand.axisGreaterThan(manualControl, 0.2);
+      private final int outtakeAxis = XboxController.Axis.kRightTrigger.value;
+      private final Trigger outtake = d_controllerCommand.axisGreaterThan(outtakeAxis, 0.2);
 
       private final POVButton setBotHigh = new POVButton(m_controller, 0);
 
@@ -223,9 +220,10 @@ public class RobotContainer {
 	elbowMove2.and(manualControlAxis).whileTrue(new ControlElbow(m_Elbow, m_controller));
 
 
-  runIntake.whileTrue(new RunIntake(m_Intake));
+  runIntake.whileTrue(new RunIntake(m_Intake,Constants.Intake.coneIntakeSpeed));
+  runIntake.and(cubeModify).whileTrue(new RunIntake(m_Intake,Constants.Intake.cubeIntakeSpeed));
 
-  outtake.whileTrue(new ReverseIntake(m_Intake));
+  outtake.whileTrue(new RunIntake(m_Intake,Constants.Intake.reverseIntakeSpeed));
 
   //setBotInside.whileTrue(new ReverseSequence(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
 setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_BOT, m_Elbow, Constants.Elbow.ELBOW_SETPOINT_BOT));
