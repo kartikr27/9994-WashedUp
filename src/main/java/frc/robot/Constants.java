@@ -152,7 +152,7 @@ public static final class OIConstants {
     public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CONE =
         Rotation2d.fromDegrees(191); 
         public static final Rotation2d ARM_SETPOINT_GROUND_INTAKE_CUBE =
-        Rotation2d.fromDegrees(191); 
+        Rotation2d.fromDegrees(234); 
     public static final Rotation2d ARM_SETPOINT_MID_CONE = Rotation2d.fromDegrees(60);
     public static final Rotation2d ARM_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(154);
     public static final Rotation2d ARM_SETPOINT_HIGH = Rotation2d.fromDegrees(63);
@@ -175,9 +175,9 @@ public static final class OIConstants {
     public static final double kA = 0.0;
     
 
-    public static final Rotation2d ELBOW_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(43);
+    public static final Rotation2d ELBOW_SETPOINT_DOUBLE_SUBSTATION = Rotation2d.fromDegrees(53);
 
-    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(43);
+    public static final Rotation2d ELBOW_SETPOINT_SINGLE_SUBSTATION = Rotation2d.fromDegrees(53);
     public static final Rotation2d ELBOW_SETPOINT_BOT = Rotation2d.fromDegrees(1.0);
 
     public static final Rotation2d ELBOW_SETPOINT_UPRIGHT_CONE_INTAKE = Rotation2d.fromDegrees(218);
@@ -185,8 +185,8 @@ public static final class OIConstants {
         Rotation2d.fromDegrees(167); 
 
         public static final Rotation2d ELBOW_SETPOINT_GROUND_INTAKE_CUBE =
-        Rotation2d.fromDegrees(140); 
-    public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(110);
+        Rotation2d.fromDegrees(258.33); 
+    public static final Rotation2d ELBOW_SETPOINT_MID_CONE = Rotation2d.fromDegrees(115);
     public static final Rotation2d ELBOW_SETPOINT_MID_CUBE = Rotation2d.fromDegrees(-77.6);
     public static final Rotation2d ELBOW_SETPOINT_HIGH = Rotation2d.fromDegrees(195);
   }

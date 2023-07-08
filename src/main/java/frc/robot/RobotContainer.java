@@ -42,6 +42,7 @@ import frc.robot.commands.Intake.TimedIntake;
 import frc.robot.commands.Intake.TimedIntake.Direction;
 import frc.robot.commands.auto.AutoBalancing;
 import frc.robot.commands.auto.AutoBase;
+import frc.robot.commands.auto.OnePieceEngage;
 import frc.robot.commands.auto.OnePieceMobility;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants.OIConstants;
@@ -163,6 +164,7 @@ public class RobotContainer {
 
     autonSelecter = new SendableChooser<>();
     autonSelecter.addOption("One Piece Mobility", new OnePieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
+    autonSelecter.addOption("One Piece Engage", new OnePieceEngage(m_Swerve,m_Arm,m_Elbow,m_Intake));
     
     Shuffleboard.getTab("Auton").add(autonSelecter);
   }
