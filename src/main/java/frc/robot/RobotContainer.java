@@ -29,6 +29,7 @@ import frc.robot.subsystems.Elbow;
 import frc.robot.commands.ArmElbowSetpoints;
 import frc.robot.commands.ReverseSequence;
 import frc.robot.commands.SequentialSetpoint;
+import frc.robot.commands.Drivetrain.AngleCorrection;
 import frc.robot.commands.Drivetrain.SwerveDrive;
 import frc.robot.commands.Arm.ControlArm;
 import frc.robot.commands.Arm.IdleArm;
@@ -44,6 +45,7 @@ import frc.robot.commands.auto.AutoBalancing;
 import frc.robot.commands.auto.AutoBase;
 import frc.robot.commands.auto.OnePieceEngage;
 import frc.robot.commands.auto.OnePieceMobility;
+import frc.robot.commands.auto.TwoPieceBump;
 import frc.robot.commands.auto.TwoPieceMobility;
 import frc.robot.subsystems.Arm;
 import frc.robot.Constants.OIConstants;
@@ -84,6 +86,9 @@ public class RobotContainer {
 
   private final JoystickButton zeroGyro =
       new JoystickButton(d_controller, XboxController.Button.kA.value);
+
+      private final JoystickButton testRotPid =
+      new JoystickButton(d_controller, XboxController.Button.kY.value);
 
 
       private final JoystickButton resetElbowEncoder =
@@ -167,6 +172,7 @@ public class RobotContainer {
     autonSelecter.addOption("One Piece Mobility", new OnePieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
     autonSelecter.addOption("One Piece Engage", new OnePieceEngage(m_Swerve,m_Arm,m_Elbow,m_Intake));
     autonSelecter.addOption("Two Piece Mobiliity", new TwoPieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
+    autonSelecter.addOption("Two Piece Bump", new TwoPieceBump(m_Swerve,m_Arm,m_Elbow,m_Intake));
     Shuffleboard.getTab("Auton").add(autonSelecter);
   }
 
@@ -246,6 +252,8 @@ setBotInside.whileTrue(new ArmElbowSetpoints(m_Arm, Constants.Arm.ARM_SETPOINT_B
 
   d_controllerCommand.leftBumper().onTrue(new InstantCommand(() -> m_Swerve.creepModeTrue()));
   d_controllerCommand.leftBumper().onFalse(new InstantCommand(() -> m_Swerve.creepModeFalse()));
+
+  testRotPid.whileTrue(new AngleCorrection(m_Swerve));
   
   }
 public void configureSmartDashboard() {
