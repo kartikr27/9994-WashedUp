@@ -166,7 +166,7 @@ public class RobotContainer {
     autonSelecter = new SendableChooser<>();
     autonSelecter.addOption("One Piece Mobility", new OnePieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
     autonSelecter.addOption("One Piece Engage", new OnePieceEngage(m_Swerve,m_Arm,m_Elbow,m_Intake));
-    autonSelecter.addOption("Two Piece Mobiliity Bump Side", new TwoPieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
+    autonSelecter.addOption("Two Piece Mobiliity", new TwoPieceMobility(m_Swerve,m_Arm,m_Elbow,m_Intake));
     Shuffleboard.getTab("Auton").add(autonSelecter);
   }
 
